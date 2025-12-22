@@ -1,0 +1,6 @@
+{
+    "diffEditor.experimental.showEmptyDecorations": false,
+    "terminal.integrated.shellIntegration.showCommandGuide": true,
+    "terminal.integrated.showExitAlert": true,
+    "terminal.integrated.suggest.showStatusBar": true
+}
