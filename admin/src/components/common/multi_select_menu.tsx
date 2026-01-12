@@ -65,7 +65,6 @@ const MultiSelectMenu: React.FC<MultiSelectProps> = ({
         <PopoverContent 
           className="w-[var(--radix-popover-trigger-width)] p-0 bg-white shadow-xl rounded-xl border border-slate-200" 
           align="start"
-          // МАШ ЧУХАЛ: Popover доторх хулганы даралтыг зөвшөөрөх
           onPointerDownOutside={(e) => {
              if (e.target instanceof Element && e.target.closest('[data-radix-popper-content-wrapper]')) {
                e.preventDefault();
@@ -82,7 +81,6 @@ const MultiSelectMenu: React.FC<MultiSelectProps> = ({
                   return (
                     <div
                       key={item.value}
-                      // Хулганы даралтыг баталгаатай авахын тулд onClick ашиглана
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -109,8 +107,6 @@ const MultiSelectMenu: React.FC<MultiSelectProps> = ({
           </Command>
         </PopoverContent>
       </Popover>
-
-      {/* Сонгогдсон утгуудыг доор нь харуулах */}
       <div className="flex flex-wrap gap-2 mt-1">
         {selectedValues.map((val) => {
           const item = items.find((i) => i.value === val);

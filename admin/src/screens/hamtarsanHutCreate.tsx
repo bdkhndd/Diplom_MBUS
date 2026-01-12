@@ -11,10 +11,8 @@ export const HamtarsanHutCreate: React.FC = () => {
     const navigate = useNavigate();
     const { dispatch } = useAPIActions();
 
-    // Сонгох мэргэжлийн жагсаалт хадгалах
     const [mergejils, setMergejils] = useState<MergejilType[]>([]);
     
-    // Формын дата
     const [formData, setFormData] = useState({
         mergejilId: '',
         uls: '',
@@ -25,7 +23,6 @@ export const HamtarsanHutCreate: React.FC = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Мэргэжлийн жагсаалтыг ачаалах
     useEffect(() => {
         const fetchMergejils = async () => {
             try {
@@ -53,11 +50,9 @@ export const HamtarsanHutCreate: React.FC = () => {
 
         setIsSubmitting(true);
         try {
-            // result нь өөрөө HamtarsanHutType төрөлтэй ирж байгаа бол
+          
             const result = await createHamtarsanHut(formData);
             
-            // Алдаа гарч байсан хэсэг: result.data гэж бичих шаардлагагүй
-            // Хэрэв API чинь шууд object-ийг буцаадаг бол:
             const newData = result; 
             
             dispatch({ type: 'ADD_HAMTARSAN_HUT', payload: newData });
@@ -77,7 +72,7 @@ export const HamtarsanHutCreate: React.FC = () => {
             <h1 className="text-3xl font-bold mb-8 text-gray-800">➕ Шинэ хамтарсан хөтөлбөр нэмэх</h1>
             
             <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Мэргэжил сонгох */}
+             
                 <div className="space-y-2">
                     <Label htmlFor="mergejilId">Хамаарах мэргэжил</Label>
                     <select

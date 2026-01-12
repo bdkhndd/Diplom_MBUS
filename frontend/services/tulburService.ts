@@ -1,6 +1,6 @@
-import { TulburType } from './types'; // Төрлүүдээ хадгалсан файлаас импортлох
+import { TulburType } from './types'; // Төрлүүдээ хадгалсан файлаас импортлох 192.168.1.3
 
-const API_BASE_URL = 'http://10.150.34.26:4000/api/tulbur';
+const API_BASE_URL = 'http://192.168.1.3:4000/api/tulbur';
 
 
 export const getAllTulbur = async (): Promise<TulburType[]> => {

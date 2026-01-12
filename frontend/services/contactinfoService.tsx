@@ -1,6 +1,6 @@
 // frontend/services/contactService.ts
 
-const API_BASE_URL = 'http://10.150.34.26:4000';
+const API_BASE_URL = 'http://192.168.1.3:4000';
 const REQUEST_TIMEOUT = 10000;
 import axios from "axios";
 export interface ContactInfoType {
@@ -83,7 +83,7 @@ export const getContactInfo = async (): Promise<ContactInfoType | null> => {
 /**
  * Санал хүсэлт илгээх
  */
-const API_URL = 'http://10.150.34.26:4000/api/feedback';
+const API_URL = 'http://192.168.1.3:4000/api/feedback';
 export const sendFeedback = async (feedbackData: any) => {
     try {
         const response = await axios.post(API_URL, feedbackData);

@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
-const Tulbur = require('../models/tulburModel'); // Таны модел файлын зам
+const Tulbur = require('../models/tulburModel');
 
-/**
- * GET - Бүх төлбөрийн мэдээллийг авах (Мэргэжлийн мэдээллийг populate хийнэ)
- */
 const getTulbur = async (req, res) => {
     try {
         const tulburList = await Tulbur.find({})
@@ -17,9 +14,6 @@ const getTulbur = async (req, res) => {
     }
 };
 
-/**
- * GET - Нэг төлбөрийн мэдээллийг ID-аар авах
- */
 const getSingleTulbur = async (req, res) => {
     const { id } = req.params;
 
@@ -41,9 +35,6 @@ const getSingleTulbur = async (req, res) => {
     }
 };
 
-/**
- * POST - Төлбөрийн мэдээлэл шинээр нэмэх
- */
 const addTulbur = async (req, res) => {
     const { terguuleh_erelttei, busad_mergejil, tulburiin_zadargaa } = req.body;
 
@@ -59,9 +50,6 @@ const addTulbur = async (req, res) => {
     }
 };
 
-/**
- * DELETE - Төлбөрийн мэдээлэл устгах
- */
 const deleteTulbur = async (req, res) => {
     const { id } = req.params;
 
@@ -80,9 +68,6 @@ const deleteTulbur = async (req, res) => {
     }
 };
 
-/**
- * UPDATE - Төлбөрийн мэдээллийг шинэчлэх
- */
 const updateTulbur = async (req, res) => {
     const { id } = req.params;
 

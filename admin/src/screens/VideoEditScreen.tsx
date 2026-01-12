@@ -30,7 +30,7 @@ export const VideoEditScreen: React.FC = () => {
         duration: '',
     });
 
-    // Өгөгдлийг татаж ирэх
+  
     useEffect(() => {
         const fetchVideo = async () => {
             if (!id) return;
@@ -73,7 +73,7 @@ export const VideoEditScreen: React.FC = () => {
             data.append('description', formData.description);
             data.append('duration', formData.duration);
             
-            // Хэрэв шинэ файл сонгосон бол нэмнэ, үгүй бол хуучин нь байна
+           
             if (videoFile) {
                 data.append('video', videoFile);
             }
@@ -100,7 +100,7 @@ export const VideoEditScreen: React.FC = () => {
 
     return (
         <div className="p-6 md:p-12 max-w-6xl mx-auto space-y-8 bg-slate-50/50 min-h-screen">
-            {/* Header */}
+     
             <div className="flex items-center justify-between bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100">
                 <Button variant="ghost" onClick={() => navigate(-1)} className="rounded-2xl font-black text-slate-500 hover:bg-slate-50">
                     <ArrowLeft className="mr-2 h-5 w-5"/> БУЦАХ
@@ -118,7 +118,7 @@ export const VideoEditScreen: React.FC = () => {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="p-8 space-y-6">
-                            {/* Одоо байгаа эсвэл шинэ видеог харуулах */}
+                           
                             <div className="relative rounded-[2rem] overflow-hidden aspect-video bg-black shadow-2xl border-4 border-white">
                                 <video 
                                     key={previewUrl || existingVideoUrl}

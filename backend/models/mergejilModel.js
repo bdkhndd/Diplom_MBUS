@@ -34,11 +34,11 @@ const mergejilSchema = new Schema({
     },
     hicheeluud: [
         {
-            code: { type: String, required: true },     // "math"
-            name: { type: String, required: true },     // "Математик"
+            code: { type: String, required: true },     
+            name: { type: String, required: true },     
             type: { 
                 type: String, 
-                enum: ['main', 'secondary'],            // үндсэн эсвэл дагалдах
+                enum: ['main', 'secondary'],            
                 required: true 
             }
         }

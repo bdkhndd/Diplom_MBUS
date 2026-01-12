@@ -11,19 +11,16 @@ const {
 } = require('../controllers/videoController');
 const videoModel = require('../models/videoModel');
 
-// --- MULTER ТОХИРГОО ЭХЛЭЛ ---
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/videos/'); // Файл хадгалах хавтас
+        cb(null, 'uploads/videos/'); 
     },
     filename: (req, file, cb) => {
-        // Файлын нэрийг давхцахгүй байхаар тохируулах (timestamp + random)
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
     }
 });
 
-// Зөвхөн видео файл зөвшөөрөх шүүлтүүр
 const fileFilter = (req, file, cb) => {
     if (file.mimetype.startsWith('video/')) {
         cb(null, true);
@@ -35,18 +32,15 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ 
     storage: storage,
     fileFilter: fileFilter,
-    limits: { fileSize: 200 * 1024 * 1024 } // Максимум 100MB
+    limits: { fileSize: 200 * 1024 * 1024 } //100MB
 });
-// --- MULTER ТОХИРГОО ТӨГСГӨЛ ---
 
-// ROUTES
 router.get('/', getVideo);
 router.get('/:id', getSingleVideo);
 
-// POST - Шинэ видео нэмэх (upload.single('video') нэмсэн)
+
 router.post('/', upload.single('video'), addVideo);
 
-// PUT - Видео засах (Хэрэв шинэ видео файл сонговол солигдоно)
 router.put('/:id', upload.single('video'), updateVideo);
 
 router.delete('/:id', deleteVideo);

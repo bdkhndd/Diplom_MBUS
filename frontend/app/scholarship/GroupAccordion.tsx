@@ -52,7 +52,7 @@ const GroupAccordion: React.FC<GroupAccordionProps> = ({ tetgelegItem }) => {
                     
                     {populatedMergejil.length > 0 && (
                         <View style={styles.subDetail}>
-                            <Text style={styles.subTitle}>✅ Холбоотой мэргэжлүүд:</Text>
+                            <Text style={styles.subTitle}>Холбоотой мэргэжлүүд:</Text>
                             {populatedMergejil.map((m) => (
                                 <View key={m._id} style={styles.bulletItem}>
                                     <View style={styles.bullet} />

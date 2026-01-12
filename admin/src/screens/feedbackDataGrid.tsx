@@ -1,5 +1,3 @@
-// admin/src/screens/FeedbackDataGrid.tsx - Modal Forms
-
 import React, { useEffect, useState } from 'react';
 import { Eye, Trash2, MessageSquare, X } from 'lucide-react';
 import { getFeedback, deleteFeedback, updateFeedback, type FeedbackType } from '../api/index';
@@ -8,9 +6,6 @@ import { Button } from '../components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
 
-// ===================================
-// FEEDBACK DETAIL MODAL
-// ===================================
 const FeedbackDetailModal: React.FC<{
     isOpen: boolean;
     feedback?: FeedbackType;
@@ -19,7 +14,7 @@ const FeedbackDetailModal: React.FC<{
 }> = ({ isOpen, feedback, onClose, onUpdate }) => {
     if (!isOpen || !feedback) return null;
 
-    const handleStatusChange = async (newStatus: 'new' | 'read' | 'replied' | 'archived') => {
+    const handleStatusChange = async (newStatus:  'new' | 'read' | 'replied' | 'archived') => {
         try {
             await onUpdate(feedback._id!, newStatus);
             onClose();
@@ -32,7 +27,7 @@ const FeedbackDetailModal: React.FC<{
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
             <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 <div className="sticky top-0 flex items-center justify-between p-6 border-b bg-white">
-                    <h2 className="text-2xl font-bold text-gray-900">💬 Санал Хүсэлтийн Дэлгэрэнгүй</h2>
+                    <h2 className="text-2xl font-bold text-gray-900">Санал Хүсэлтийн Дэлгэрэнгүй</h2>
                     <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded">
                         <X className="w-5 h-5" />
                     </button>
@@ -88,9 +83,6 @@ const FeedbackDetailModal: React.FC<{
     );
 };
 
-// ===================================
-// FEEDBACK DATA GRID
-// ===================================
 const FeedbackDataGrid: React.FC = () => {
     const { state, dispatch } = useAPIActions();
     const feedbackList = state.feedback ?? [];
@@ -173,7 +165,7 @@ const FeedbackDataGrid: React.FC = () => {
     return (
         <div className="p-8">
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-3xl font-bold text-gray-900">💬 Санал & Үнэлгээ ({feedbackList.length})</h1>
+                <h1 className="text-3xl font-bold text-gray-900"> Санал & Үнэлгээ ({feedbackList.length})</h1>
             </div>
 
             <FeedbackDetailModal

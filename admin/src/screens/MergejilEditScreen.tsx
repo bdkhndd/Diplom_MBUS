@@ -19,7 +19,7 @@ const MergejilEditScreen: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(true);
 
-    // Form State
+
     const [formData, setFormData] = useState({
         tenhimId: '',
         mergejil_Kod: '',
@@ -114,7 +114,7 @@ const MergejilEditScreen: React.FC = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-8 space-y-8">
-                    {/* Үндсэн мэдээлэл */}
+                
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="space-y-3">
                             <Label className="text-sm font-bold text-slate-700 flex items-center gap-2">
@@ -194,7 +194,7 @@ const MergejilEditScreen: React.FC = () => {
                         />
                     </div>
 
-                    {/* Хичээлүүдийн удирдлага */}
+                 
                     <div className="bg-slate-50 p-6 rounded-[2rem] border-2 border-dashed border-slate-200 space-y-6">
                         <div className="flex items-center justify-between">
                             <h3 className="font-bold text-slate-800">Хичээлийн жагсаалт</h3>
@@ -237,7 +237,7 @@ const MergejilEditScreen: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Үйлдлүүд */}
+              
                     <div className="flex gap-4 pt-4">
                         <Button 
                             type="button" 

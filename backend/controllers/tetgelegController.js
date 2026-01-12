@@ -6,7 +6,7 @@ const getTetgeleg = async (req, res) => {
         const tetgelegList = await Tetgeleg.find({})
             .populate('meregjilId')
             .sort({ bosgo_Onoo: 1 });
-        res.status(200).json({ data: tetgelegList });  // ✅ { data: ... }
+        res.status(200).json({ data: tetgelegList });  
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -24,7 +24,7 @@ const getSingleTetgeleg = async (req, res) => {
         if (!tetgeleg) {
             return res.status(404).json({ error: 'Тэтгэлэг олдсонгүй' });
         }
-        res.status(200).json({ data: tetgeleg });  // ✅ { data: ... }
+        res.status(200).json({ data: tetgeleg });  
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -43,7 +43,7 @@ const addTetgeleg = async (req, res) => {
             hugatsaa,
             category
         });
-        res.status(201).json({ data: newTetgeleg });  // ✅ { data: ... }
+        res.status(201).json({ data: newTetgeleg });  
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -60,7 +60,7 @@ const deleteTetgeleg = async (req, res) => {
         if (!tetgeleg) {
             return res.status(400).json({ error: 'Тэтгэлэг олдсонгүй' });
         }
-        res.status(200).json({ data: tetgeleg });  // ✅ { data: ... }
+        res.status(200).json({ data: tetgeleg });  
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -81,7 +81,7 @@ const updateTetgeleg = async (req, res) => {
         if (!tetgeleg) {
             return res.status(404).json({ error: 'Тэтгэлэг олдсонгүй' });
         }
-        res.status(200).json({ data: tetgeleg });  // ✅ { data: ... }
+        res.status(200).json({ data: tetgeleg });  
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

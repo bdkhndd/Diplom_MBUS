@@ -10,7 +10,7 @@ function createTimeoutPromise(timeoutMs: number): Promise<never> {
 
 export async function getTetgeleg(): Promise<any[]> {
   try {
-    const res = await fetch('http://10.150.34.26:4000/api/tetgeleg');
+    const res = await fetch('http://192.168.1.3:4000/api/tetgeleg');
     const result = await res.json();
     
     if (result && result.data) {

@@ -25,7 +25,7 @@ export default function TabLayout() {
             <Tabs.Screen 
                 name="index" 
                 options={{
-                    headerShown: false, // ene headerg index.tsx d Stack.setOptions oor tohiruulna
+                    headerShown: false, 
                     title: 'Нүүр', 
                     tabBarIcon: ({ color, focused }) => (
                         <Ionicons name={focused ? "home" : "home-outline"} size={24} color={color} />

@@ -63,7 +63,7 @@ const TulburDataGrid: React.FC = () => {
                         <p className="text-xs md:text-sm text-gray-400 font-medium">Нийт {tulburList.length} тохиргоо</p>
                     </div>
                 </div>
-                {/* 3. "Шинэ нэмэх" товч дээр navigate холбосон */}
+              
                 <Button 
                     onClick={() => navigate('/tulbur/create')} 
                     className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 shadow-lg font-bold"
@@ -122,7 +122,7 @@ const TulburDataGrid: React.FC = () => {
                                     </TableCell>
                                     <TableCell className="text-right pr-4">
                                         <div className="flex justify-end gap-1">
-                                            {/* 4. "Засах" товч дээр navigate холбосон */}
+                                         
                                             <Button 
                                                 variant="ghost" 
                                                 size="icon" 

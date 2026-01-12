@@ -1,36 +1,27 @@
-// ===================================
-// API RESPONSE TYPE
-// ===================================
 export interface ApiResponse<T> {
     data: T;
     message?: string;
     success?: boolean;
 }
-
-// ===================================
-// 1. TENHIM (Тэнхим) - DEPARTMENT
-// ===================================
+//
 export type TenhimType = {
     _id?: string;
     ner: string;
     tergvvleh_chiglel: string;
     shagnal?: string;
-    zurag?: string[];                      // 🔥 Зураг массив: [cover.webp, detail.webp]
+    zurag?: string[];                      
     bvteel?: string;
     tailbar?: string;
     createdAt?: string;
     updatedAt?: string;
 };
-
-// ===================================
-// 2. MERGEJIL (Мэргэжил) - MAJOR/SPECIALTY
-// ===================================
+//
 export type Hicheel = {
     code: string;
     name: string;
     type: 'main' | 'secondary';
 };
-
+//
 export type MergejilType = {
     _id?: string;
     tenhimId: string | TenhimType;
@@ -44,10 +35,7 @@ export type MergejilType = {
     createdAt?: string;
     updatedAt?: string;
 };
-
-// ===================================
-// 3. HAMTARSAN HUT (Хамтарсан Хөтөлбөр) - PARTNERSHIP
-// ===================================
+//
 export type HamtarsanHutType = {
     _id?: string;
     mergejilId: string | MergejilType;
@@ -58,10 +46,7 @@ export type HamtarsanHutType = {
     createdAt?: string;
     updatedAt?: string;
 };
-
-// ===================================
-// 4. TETGELEG (Тэтгэлэг) - SCHOLARSHIP
-// ===================================
+//
 export type TetgelegType = {
     _id?: string;
     meregjilId: string[] | string | MergejilType[] | MergejilType;
@@ -73,7 +58,7 @@ export type TetgelegType = {
     createdAt?: string;
     updatedAt?: string;
 };
-
+//
 export type TulburType = {
     _id?: string;
     terguuleh_erelttei: {
@@ -94,24 +79,17 @@ export type TulburType = {
     createdAt?: string;
     updatedAt?: string;
 };
-
-// ===================================
-// 6. VIDEO (Видео) - MEDIA CONTENT
-// ===================================
+//
 export type VideoType = {
     _id?: string;
     title: string;
     description: string;
-    videoUrl: string;                     // YouTube эсвэл Vimeo URL
-    thumbnail?: string;                   // Thumbnail зураг URL
-    duration?: number;                    // Сек-ээр                   
+    videoUrl: string;                                    
+    duration?: number;                                    
     createdAt?: string;
     updatedAt?: string;
 };
-
-// ===================================
-// 7. CONTACT INFO (Холбоо Барих Мэдээлэл)
-// ===================================
+//
 export type ContactInfoType = {
     _id?: string;
     phone: string;
@@ -143,10 +121,7 @@ export type ContactInfoType = {
     createdAt?: string;
     updatedAt?: string;
 };
-
-// ===================================
-// 8. FEEDBACK (Санал Хүсэлт)
-// ===================================
+//
 export type FeedbackType = {
     _id?: string;
     name: string;
@@ -154,17 +129,14 @@ export type FeedbackType = {
     phone?: string;
     subject: string;
     message: string;
-    status?: 'new' | 'read' | 'replied' | 'archived';
+    status?: string;
     priority?: 'low' | 'medium' | 'high';
     adminNote?: string;
-    attachments?: string[];                // URL массив
+    attachments?: string[];               
     createdAt?: string;
     updatedAt?: string;
 };
 
-// ===================================
-// HELPER TYPES
-// ===================================
 export interface MergejilTypeSimple {
     _id: string;
     mergejil_Ner: string;

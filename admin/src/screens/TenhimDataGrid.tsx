@@ -9,7 +9,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Badge } from '../components/ui/badge';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogClose } from "../components/ui/dialog";
 
-const IMAGE_BASE_URL = 'http://10.150.34.26:4000';
+const IMAGE_BASE_URL = 'http://192.168.1.3:4000';
 
 type DetailType = 'tailbar' | 'shagnal' | 'chiglel' | 'buteel';
 
@@ -105,7 +105,7 @@ const TenhimDataGrid: React.FC = () => {
                                 </TableCell>
                                 <TableCell>
                                     <div className="max-w-[150px]">
-                                        {/* Талбарын нэр: tergvvleh_chiglel */}
+                                       
                                         <p className="text-xs text-slate-600 line-clamp-2 italic">{t.tergvvleh_chiglel || "Байхгүй"}</p>
                                         <Dialog>
                                             <DialogTrigger asChild><button className="text-[10px] text-blue-600 font-bold hover:underline">Дэлгэрэнгүй</button></DialogTrigger>
@@ -115,7 +115,7 @@ const TenhimDataGrid: React.FC = () => {
                                 </TableCell>
                                 <TableCell>
                                     <div className="max-w-[150px]">
-                                        {/* Талбарын нэр: bvteel */}
+                                       
                                         <p className="text-xs text-slate-600 line-clamp-2 italic">{t.bvteel || "Байхгүй"}</p>
                                         <Dialog>
                                             <DialogTrigger asChild><button className="text-[10px] text-purple-600 font-bold hover:underline">Бүтээл харах</button></DialogTrigger>
@@ -168,7 +168,7 @@ const TenhimDataGrid: React.FC = () => {
 };
 
 const DetailCard = ({ data, showType }: { data: any, showType: DetailType }) => {
-    // Өгөгдлийн талбарын нэрсийг таны API-тай нийцүүлж засав: tergvvleh_chiglel, bvteel
+   
     const config = {
         tailbar: { title: 'Тэнхимийн тайлбар', icon: <Info className="w-8 h-8" />, color: 'from-indigo-600 to-purple-800', badge: 'bg-orange-500', field: data.tailbar },
         shagnal: { title: 'Амжилт & Шагнал', icon: <Award className="w-8 h-8" />, color: 'from-emerald-600 to-teal-800', badge: 'bg-green-500', field: data.shagnal },
@@ -198,7 +198,6 @@ const DetailCard = ({ data, showType }: { data: any, showType: DetailType }) => 
                 </div>
             </div>
             
-            {/* Scroll ажиллах хэсэг: overflow-y-auto + min-h-0 + flex-1 */}
             <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50/50 min-h-0 scrollbar-thin scrollbar-thumb-indigo-200">
                 <div className="bg-white p-5 sm:p-8 rounded-[1.2rem] sm:rounded-[2rem] shadow-sm border border-slate-100 min-h-full">
                     <p className="text-slate-600 leading-relaxed text-sm sm:text-base italic whitespace-pre-wrap font-medium">

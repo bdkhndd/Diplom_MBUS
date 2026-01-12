@@ -20,7 +20,7 @@ export const TetgelegCreateScreen: React.FC = () => {
     const [formData, setFormData] = useState({
         teteglegNer: '',
         shaardlag: '',
-        meregjilId: [] as string[], // Таны хүссэн 'meregjilId' нэрээр
+        meregjilId: [] as string[], 
         teteglegiin_Hemjee: '',
         bosgo_Onoo: '',
         hugatsaa: '',

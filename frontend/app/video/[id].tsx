@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { getVideoById } from '../../services/videoService';
 import { VideoType } from '../../services/types';
 
-const BASE_URL = 'http://10.150.34.26:4000';
+const BASE_URL = 'http://192.168.1.3:4000';
 const PRIMARY_COLOR = '#3b5998';
 
 export default function VideoDetailScreen() {

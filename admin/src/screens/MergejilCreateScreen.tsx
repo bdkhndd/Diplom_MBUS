@@ -12,7 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import SelectMenu from '../components/common/mergejil_menu';
 
 const MergejilCreateScreen: React.FC = () => {
-    const navigate = useNavigate();
+    // navigate('/mergejil')-ийг ашиглан хэрэглэгчийг /mergejil рүү шилжүүл
+    const navigate = useNavigate(); 
     const { dispatch } = useAPIActions();
     const [tenhimList, setTenhimList] = useState<TenhimType[]>([]);
     const [loading, setLoading] = useState(false);

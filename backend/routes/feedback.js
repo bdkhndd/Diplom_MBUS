@@ -2,7 +2,6 @@ const express = require('express');
 const Feedback = require('../models/feedbackModel');
 const router = express.Router();
 
-// GET бүх санал
 router.get('/', async (req, res) => {
     try {
         const feedbacks = await Feedback.find().sort({ createdAt: -1 });
@@ -12,7 +11,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// GET нэг санал
 router.get('/:id', async (req, res) => {
     try {
         const feedback = await Feedback.findById(req.params.id);
@@ -25,7 +23,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// POST шинэ санал
 router.post('/', async (req, res) => {
     try {
         const { name, email, phone, subject, message } = req.body;
@@ -51,7 +48,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// PUT санал шинэчлэх
 router.put('/:id', async (req, res) => {
     try {
         const feedback = await Feedback.findByIdAndUpdate(
@@ -69,7 +65,6 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// DELETE санал устгах
 router.delete('/:id', async (req, res) => {
     try {
         const feedback = await Feedback.findByIdAndDelete(req.params.id);

@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 const Feedback = require('../models/feedbackModel');
 
-/**
- * GET - Бүх санал хүсэлтийг авах
- */
 const getFeedbacks = async (req, res) => {
     try {
         const feedbackList = await Feedback.find({})
@@ -14,9 +11,6 @@ const getFeedbacks = async (req, res) => {
     }
 };
 
-/**
- * GET - Нэг санал хүсэлтийг ID-аар авах
- */
 const getSingleFeedback = async (req, res) => {
     const { id } = req.params;
 
@@ -35,9 +29,6 @@ const getSingleFeedback = async (req, res) => {
     }
 };
 
-/**
- * POST - Шинэ санал хүсэлт илгээх
- */
 const createFeedback = async (req, res) => {
     const { name, email, phone, subject, message, attachments } = req.body;
 
@@ -56,9 +47,6 @@ const createFeedback = async (req, res) => {
     }
 };
 
-/**
- * DELETE - Санал хүсэлт устгах
- */
 const deleteFeedback = async (req, res) => {
     const { id } = req.params;
 
@@ -77,9 +65,6 @@ const deleteFeedback = async (req, res) => {
     }
 };
 
-/**
- * PUT - Санал хүсэлтийг шинэчлэх (Жишээ нь: хариу өгөх эсвэл төлөв солих)
- */
 const updateFeedback = async (req, res) => {
     const { id } = req.params;
 

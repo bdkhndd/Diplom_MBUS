@@ -45,7 +45,7 @@ export const ContactCreateScreen: React.FC = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* ЗҮҮН ТАЛ */}
+              
                 <div className="lg:col-span-2 space-y-6">
                     <Card className="rounded-[2.5rem] border-none shadow-xl">
                         <CardHeader><CardTitle className="text-lg font-black flex items-center gap-2"><MapPin className="text-blue-600"/> Ерөнхий мэдээлэл</CardTitle></CardHeader>
@@ -87,7 +87,7 @@ export const ContactCreateScreen: React.FC = () => {
                     </Card>
                 </div>
 
-                {/* БАРУУН ТАЛ */}
+                
                 <div className="space-y-6">
                     <Card className="rounded-[2.5rem] border-none shadow-xl bg-white">
                         <CardHeader><CardTitle className="text-lg font-black flex items-center gap-2"><Clock className="text-blue-600"/> Цагийн хуваарь</CardTitle></CardHeader>
@@ -98,25 +98,6 @@ export const ContactCreateScreen: React.FC = () => {
                             </div>
                             <Input placeholder="Ажлын өдөр" value={formData.workingHours.weekdays} onChange={e => setFormData({...formData, workingHours: {...formData.workingHours, weekdays: e.target.value}})} className="rounded-xl bg-slate-50 border-none h-11"/>
                             <Input placeholder="Амралт" value={formData.workingHours.weekend} onChange={e => setFormData({...formData, workingHours: {...formData.workingHours, weekend: e.target.value}})} className="rounded-xl bg-red-50/30 border-none h-11 text-red-600 font-bold"/>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="rounded-[2.5rem] border-none shadow-xl">
-                        <CardHeader className="flex flex-row justify-between items-center">
-                            <CardTitle className="text-sm font-black text-red-600 flex items-center gap-2"><ShieldAlert className="w-4 h-4"/> Яаралтай дугаар</CardTitle>
-                            <Button type="button" size="sm" variant="ghost" onClick={() => setFormData({...formData, emergencyContacts: [...formData.emergencyContacts, {name:'', phone:''}]})} className="text-red-500"><Plus className="w-4 h-4"/></Button>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                            {formData.emergencyContacts.map((ec, idx) => (
-                                <div key={idx} className="flex gap-2 bg-slate-50 p-2 rounded-xl border border-slate-100">
-                                    <Input placeholder="Нэр" value={ec.name} onChange={e => {
-                                        const newEmg = [...formData.emergencyContacts]; newEmg[idx].name = e.target.value; setFormData({...formData, emergencyContacts: newEmg});
-                                    }} className="h-8 text-[10px] border-none bg-white"/>
-                                    <Input placeholder="Утас" value={ec.phone} onChange={e => {
-                                        const newEmg = [...formData.emergencyContacts]; newEmg[idx].phone = e.target.value; setFormData({...formData, emergencyContacts: newEmg});
-                                    }} className="h-8 text-[10px] border-none bg-white font-black text-red-600"/>
-                                </div>
-                            ))}
                         </CardContent>
                     </Card>
 

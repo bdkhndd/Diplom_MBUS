@@ -44,7 +44,7 @@ const feedbackSchema = new Schema({
         trim: true
     },
     attachments: [{
-        type: String // URL массив
+        type: String 
     }]
 }, { 
     timestamps: true,

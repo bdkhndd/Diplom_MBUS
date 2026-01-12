@@ -14,9 +14,11 @@ import {
 import { Ionicons } from '@expo/vector-icons'; 
 import { Stack } from 'expo-router';
 
+// Төрлүүд болон дата татах сервисийг импортлох
 import { MergejilType, LessonType, TetgelegType } from '@/services/types';
 import { fetchCalculatorData } from '@/services/calculatorService';
 
+// Өнгөний тогтмол утгууд
 const COLORS = {
     primary: '#3b5998',
     primaryDark: '#2d4373',
@@ -33,12 +35,14 @@ const COLORS = {
     modalOverlay: 'rgba(0,0,0,0.5)',
 };
 
+// Хэрэглэгчийн оруулсан онооны интерфэйс
 interface UserScore {
     code: string; 
     name: string;
     score: number | null;
 }
 
+// Тооцооллын үр дүнгийн интерфэйс
 interface CalculationResult {
     mergejil: MergejilType;
     isEligible: boolean;
@@ -47,12 +51,14 @@ interface CalculationResult {
 }
 
 export default function CalculatorScreen() {
+    // Төлөвүүдийг (States) тодорхойлох
     const [isLoading, setIsLoading] = useState(true);
     const [allData, setAllData] = useState<{ mergejil: MergejilType[]; tetgeleg: TetgelegType[] }>({ 
         mergejil: [], 
         tetgeleg: [] 
     });
     
+    // Анхны хичээлийн жагсаалт (3 хичээл)
     const initialLessons: UserScore[] = [
         { code: '', name: 'Хичээл сонгох', score: null }, 
         { code: '', name: 'Хичээл сонгох', score: null },
@@ -63,10 +69,11 @@ export default function CalculatorScreen() {
     const [calculationResults, setCalculationResults] = useState<CalculationResult[]>([]);
     const [isResultExpanded, setIsResultExpanded] = useState<string | null>(null);
     
-    // Modal state
+    // Modal-ын төлөв
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedLessonIndex, setSelectedLessonIndex] = useState<number | null>(null);
 
+    // Урьдчилан тодорхойлсон хичээлүүдийн жагсаалт
     const predefinedLessons: LessonType[] = [
         { code: 'math', name: 'Математик', type: 'main' },
         { code: 'physical', name: 'Физик', type: 'main' },
@@ -77,7 +84,7 @@ export default function CalculatorScreen() {
         { code: 'sociology', name: 'Нийгэм', type: 'main' },
     ];
 
-    // ugugdul tatah
+    // Өгөгдөл серверээс татах
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
@@ -98,12 +105,12 @@ export default function CalculatorScreen() {
         loadData();
     }, []);
 
-    // hichl songh model
     const openLessonModal = (index: number) => {
         setSelectedLessonIndex(index);
         setIsModalVisible(true);
     };
 
+    // Жагсаалтаас хичээл сонгох үед ажиллах
     const handleLessonSelect = (lessonCode: string) => {
         if (selectedLessonIndex === null) return;
 
@@ -112,6 +119,7 @@ export default function CalculatorScreen() {
         setUserScores(prev => {
             const updated = [...prev];
 
+            // Сонгогдсон хичээл байгаа эсэхийг шалгах
             if (prev.some((u, i) => u.code === lessonCode && i !== selectedLessonIndex)) {
                 Alert.alert("Анхааруулга", "Энэ хичээлийг аль хэдийн сонгосон байна");
                 return prev;
@@ -129,7 +137,7 @@ export default function CalculatorScreen() {
         setIsModalVisible(false);
     };
 
-    // onoo
+    // Оноо өөрчлөгдөх үед ажиллах функц
     const handleScoreChange = (index: number, text: string) => {
         const score = text ? parseInt(text) : null;
 
@@ -140,12 +148,13 @@ export default function CalculatorScreen() {
         });
     };
 
-    //tootsooll hiih
+    // Элсэх боломжтой эсэхийг тооцоолох 
     const calculateEligibility = () => {
         const validScores = userScores.filter(s => s.code !== '' && s.score !== null && !isNaN(s.score));
 
+        // Дор хаяж 2 хичээл оруулсан байх шаардлагатай
         if (validScores.length < 2) {
-            Alert.alert("Анхааруулга", "Та дор хаяж 2 хичээлийн оноог зөв оруулсан байх ёстой.");
+            Alert.alert("Уучлаарай", "Та дор хаяж 2 хичээлийн оноог зөв оруулсан байх ёстой.");
             setCalculationResults([]);
             return;
         }
@@ -155,22 +164,22 @@ export default function CalculatorScreen() {
             return acc;
         }, {} as { [key: string]: number });
 
+        // 490-өөс дээш оноо авсан хичээлүүдийг шүүх
         const passedLessons = Object.entries(allUserScores)
-            .filter(([_, score]) => score >= 500)
+            .filter(([_, score]) => score >= 490)
             .map(([code]) => code);
 
         if (passedLessons.length >= 2) {
             const results: CalculationResult[] = allData.mergejil
                 .filter(mergejil => {
+                    // Мэргэжилд хамааралтай хичээлүүдийг шалгах
                     const relatedLessons = mergejil.hicheeluud.map(h => h.code);
                     const relatedPassed = relatedLessons.filter(code =>
                         passedLessons.includes(code)
                     );
-
                     const hasMain = mergejil.hicheeluud.some(lesson => 
                         relatedPassed.includes(lesson.code)
                     );
-
                     const hasTwoRelated = relatedPassed.length >= 2;
 
                     return hasMain && hasTwoRelated;
@@ -181,6 +190,7 @@ export default function CalculatorScreen() {
 
                     const requiredLessons = mergejil.hicheeluud.filter(h => h.type === 'main');
 
+                    // Босго оноо хүрсэн эсэхийг шалгах
                     for (const lesson of requiredLessons) {
                         const userScore = allUserScores[lesson.code] || 0;
                         if (userScore < mergejil.minScore) {
@@ -191,7 +201,7 @@ export default function CalculatorScreen() {
                             });
                         }
                     }
-
+                    // Тэтгэлэгт хамрагдах боломжтой эсэхийг шалгах
                     let eligibleTetgeleg: TetgelegType[] = [];
                     
                     if (isEligible) {
@@ -201,7 +211,6 @@ export default function CalculatorScreen() {
                         console.log(`🎓 ${mergejil.mergejil_Ner}: Дундаж оноо = ${averageScore.toFixed(2)}`);
 
                         eligibleTetgeleg = allData.tetgeleg.filter(tetgeleg => {
-                            // Field neriig shalgah
                             const mergejilIds = tetgeleg.meregjilId || tetgeleg.meregjilId || [];
                             
                             const appliesToCurrentMajor = mergejilIds.some((idOrObject: any) => {
@@ -220,10 +229,6 @@ export default function CalculatorScreen() {
 
                             const meetsScore = averageScore >= tetgeleg.bosgo_Onoo;
                             
-                            if (appliesToCurrentMajor) {
-                                console.log(`    Босго: ${tetgeleg.bosgo_Onoo}, Дундаж: ${averageScore.toFixed(2)}, Шалгуур: ${meetsScore ? '✅' : '❌'}`);
-                            }
-
                             return appliesToCurrentMajor && meetsScore;
                         });
 
@@ -233,6 +238,7 @@ export default function CalculatorScreen() {
                     return { mergejil, isEligible, missingScore, eligibleTetgeleg };
                 });
 
+            // Үр дүнг эрэмбэлэх (Боломжтой мэргэжлүүд нь эхэндээ)
             const sortedResults = results.sort((a, b) => {
                 if (a.isEligible && !b.isEligible) return -1;
                 if (!a.isEligible && b.isEligible) return 1;
@@ -241,18 +247,19 @@ export default function CalculatorScreen() {
 
             setCalculationResults(sortedResults);
         } else {
-            Alert.alert("Анхааруулга", "Та 2-оос дээш хичээлд 500+ оноо авсан байх ёстой.");
+            Alert.alert("Уучлаарай", "Та 2-оос дээш хичээлд 490+ оноо авсан байх ёстой.");
             setCalculationResults([]);
         }
     };
 
-    // tsewrleh
+    // Оноо болон үр дүнг цэвэрлэх функц
     const handleReset = () => {
         setUserScores(initialLessons);
         setCalculationResults([]);
         setIsResultExpanded(null);
     };
 
+    // Ачаалж буй төлөв харуулах
     if (isLoading) {
         return (
             <View style={styles.loadingContainer}>
@@ -280,7 +287,7 @@ export default function CalculatorScreen() {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContent}
             >
-                {/*Header hesg*/}
+                {/* Толгой хэсгийн карт */}
                 <View style={styles.headerCard}>
                     <Ionicons name="school-outline" size={48} color={COLORS.primary} />
                     <Text style={styles.headerTitle}>Элсэлтийн Тооцоолуур</Text>
@@ -289,7 +296,7 @@ export default function CalculatorScreen() {
                     </Text>
                 </View>
 
-                {/* input section*/}
+                {/* Оноо оруулах хэсэг */}
                 <View style={styles.inputCard}>
                     <View style={styles.sectionHeader}>
                         <Ionicons name="create-outline" size={22} color={COLORS.primary} />
@@ -333,7 +340,7 @@ export default function CalculatorScreen() {
                         </View>
                     ))}
 
-                    {/* Action button*/}
+                    {/* Тооцоолох болон Цэвэрлэх товчлуур */}
                     <View style={styles.buttonRow}>
                         <TouchableOpacity 
                             style={[styles.button, styles.calculateButton]} 
@@ -353,13 +360,13 @@ export default function CalculatorScreen() {
                     </View>
                 </View>
 
-                {/* vr dvn*/}
+                {/* Тооцооллын үр дүн харуулах хэсэг */}
                 {calculationResults.length > 0 && (
                     <View style={styles.resultsSection}>
                         <View style={styles.sectionHeader}>
                             <Ionicons name="bar-chart-outline" size={22} color={COLORS.primary} />
                             <Text style={styles.sectionTitle}>
-                                Үр дүн ({calculationResults.length} мэргэжил)
+                                Элсэх боломжтой ({calculationResults.length} мэргэжил)
                             </Text>
                         </View>
                         
@@ -401,9 +408,9 @@ export default function CalculatorScreen() {
                                     />
                                 </TouchableOpacity>
 
+                                {/* Дэлгэрэнгүй мэдээлэл (Дэлгэсэн үед) */}
                                 {isResultExpanded === result.mergejil._id && (
                                     <View style={styles.resultDetail}>
-                                        {/* mergejiln medeelel */}
                                         <View style={styles.detailSection}>
                                             <View style={styles.detailRow}>
                                                 <Ionicons name="code-outline" size={16} color={COLORS.textLight} />
@@ -417,7 +424,7 @@ export default function CalculatorScreen() {
                                             </View>
                                         </View>
 
-                                        {/* dutuu onoo */}
+                                        {/* Дутуу онооны мэдэгдэл */}
                                         {!result.isEligible && result.missingScore.length > 0 && (
                                             <View style={styles.missingScoreBox}>
                                                 <View style={styles.boxHeader}>
@@ -435,7 +442,7 @@ export default function CalculatorScreen() {
                                             </View>
                                         )}
 
-                                        {/* tetgeleg */}
+                                        {/* Тэтгэлгийн мэдээлэл */}
                                         <View style={styles.scholarshipBox}>
                                             <View style={styles.boxHeader}>
                                                 <Ionicons name="gift-outline" size={18} color={COLORS.success} />
@@ -457,7 +464,7 @@ export default function CalculatorScreen() {
                                                                 Хэмжээ: {t.teteglegiin_Hemjee}
                                                             </Text>
                                                             <Text style={styles.scholarshipDetail}>
-                                                                хөтөлбөр: {t.shaardlag}
+                                                                Шаардлага: {t.shaardlag}
                                                             </Text>
                                                         </View>
                                                     </View>
@@ -475,7 +482,7 @@ export default function CalculatorScreen() {
                     </View>
                 )}
                 
-                {/* hoosn tuluw */}
+                {/* Хоосон үеийн төлөв */}
                 {calculationResults.length === 0 && !isLoading && (
                     <View style={styles.emptyState}>
                         <Ionicons name="calculator-outline" size={64} color={COLORS.textLight} />
@@ -486,7 +493,7 @@ export default function CalculatorScreen() {
                 )}
             </ScrollView>
 
-            {/* hichl songh*/}
+            {/* Хичээл сонгох Modal */}
             <Modal
                 visible={isModalVisible}
                 transparent={true}

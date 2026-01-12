@@ -25,20 +25,19 @@ export const HamtarsanHutEdit: React.FC = () => {
             if (!id) return;
             setIsLoading(true);
             try {
-                // 1. Мэргэжлийн жагсаалт татах
+               
                 if (state.mergejil.length === 0) {
                     const mRes: any = await getMergejil();
                     const payloadData = mRes.data || mRes;
                     dispatch({ type: 'SET_MERGEJIL', payload: payloadData });
                 }
 
-                // 2. Хамтарсан хөтөлбөрийн датаг авах
                 const result = await getHamtarsanHutById(id);
-                // ЗАСВАР: TypeScript алдааг арилгахын тулд шууд result-ийг ашиглана
+               
                 const actualData: any = result; 
                 
                 setFormData({
-                    // Хэрэв mergejilId нь populate хийгдсэн объект бол ID-г нь авна
+                   
                     mergejilId: typeof actualData.mergejilId === 'object' ? 
                                 (actualData.mergejilId._id || actualData.mergejilId) : 
                                 actualData.mergejilId,
@@ -62,20 +61,19 @@ export const HamtarsanHutEdit: React.FC = () => {
         try {
             const result = await updateHamtarsanHut(id!, formData);
             
-            // ЗАСВАР: result.data биш шууд result-ийг ашиглана
             dispatch({ 
                 type: 'UPDATE_HAMTARSAN_HUT', 
                 payload: result 
             });
             
             alert("Амжилттай шинэчлэгдлээ.");
-            navigate('/hamtarsan_hut'); // Жагсаалт руу буцах
+            navigate('/hamtarsan_hut'); 
         } catch (error) {
             console.error("Засахад алдаа гарлаа:", error);
             alert("Шинэчлэхэд алдаа гарлаа.");
         }
     };
-    // Input болон Select-ийн утгыг өөрчлөх
+  
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -87,7 +85,7 @@ export const HamtarsanHutEdit: React.FC = () => {
             <h1 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-4">🤝 Хамтарсан хөтөлбөр засах</h1>
             
             <form onSubmit={handleUpdate} className="space-y-5">
-                {/* 1. МЭРГЭЖИЛ СОНГОХ (Dropdown) */}
+        
                 <div>
                     <label className="text-sm font-semibold text-gray-600 block mb-1">Хамаарах мэргэжил</label>
                     <select
@@ -106,7 +104,7 @@ export const HamtarsanHutEdit: React.FC = () => {
                     </select>
                 </div>
 
-                {/* 2. СУРГУУЛИЙН НЭР */}
+            
                 <div>
                     <label className="text-sm font-semibold text-gray-600 block mb-1">Сургуулийн нэр</label>
                     <Input 
@@ -118,7 +116,7 @@ export const HamtarsanHutEdit: React.FC = () => {
                     />
                 </div>
 
-                {/* 3. УЛС */}
+            
                 <div>
                     <label className="text-sm font-semibold text-gray-600 block mb-1">Улс</label>
                     <Input 
@@ -130,7 +128,7 @@ export const HamtarsanHutEdit: React.FC = () => {
                     />
                 </div>
 
-                {/* 4. ХӨТӨЛБӨР */}
+              
                 <div>
                     <label className="text-sm font-semibold text-gray-600 block mb-1">Хөтөлбөр</label>
                     <Input 
@@ -142,7 +140,6 @@ export const HamtarsanHutEdit: React.FC = () => {
                     />
                 </div>
 
-                {/* 5. ХУГАЦАА */}
                 <div>
                     <label className="text-sm font-semibold text-gray-600 block mb-1">Хугацаа</label>
                     <Input 

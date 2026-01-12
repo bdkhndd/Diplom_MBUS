@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const ContactInfo = require('../models/contactinfoModel');
 
-// GET - Бүх холбоо барих мэдээлэл авах
 const getContactInfo = async (req, res) => {
     try {
         const contactList = await ContactInfo.find({}).sort({ createdAt: -1 });
@@ -11,7 +10,6 @@ const getContactInfo = async (req, res) => {
     }
 };
 
-// GET - Нэг холбоо барих мэдээлэл авах
 const getSingleContactInfo = async (req, res) => {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -29,7 +27,6 @@ const getSingleContactInfo = async (req, res) => {
     }
 };
 
-// POST - Шинэ холбоо барих мэдээлэл нэмэх
 const addContactInfo = async (req, res) => {
     const { 
         phone, email, website, address, 
@@ -59,7 +56,6 @@ const addContactInfo = async (req, res) => {
     }
 };
 
-// DELETE - Холбоо барих мэдээлэл устгах
 const deleteContactInfo = async (req, res) => {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -77,7 +73,6 @@ const deleteContactInfo = async (req, res) => {
     }
 };
 
-// PUT - Холбоо барих мэдээлэл шинэчлэх
 const updateContactInfo = async (req, res) => {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {

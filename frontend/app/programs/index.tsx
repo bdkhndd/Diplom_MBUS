@@ -9,7 +9,7 @@ type MergejilType = {
     mergejil_Ner: string;
 };
 
-const API_BASE_URL = 'http://10.150.34.26:4000/api/mergejil';
+const API_BASE_URL = 'http://192.168.1.3:4000/api/mergejil';
 
 const APP_COLORS = {
     primary: '#3b5998', 

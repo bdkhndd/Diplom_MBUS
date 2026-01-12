@@ -45,19 +45,12 @@ export const TetgelegDataGrid: React.FC = () => {
         fetchInitialData();
     }, [dispatch]);
 
-    // Мэргэжлийн нэрсийг ID-аар нь шүүж авах функц
     const getMergejilList = (mIds: any) => {
-        // 1. Хэрэв ID-нууд байхгүй эсвэл хоосон бол
         if (!mIds || (Array.isArray(mIds) && mIds.length === 0)) return ["Бүх мэргэжил"];
-        
-        // 2. Ганц ID байвал массив болгох
         const ids = Array.isArray(mIds) ? mIds : [mIds];
         
         return ids.map(id => {
-            // 3. ID-г цэвэрлэх (Объект байвал _id-г нь авах)
             const currentId = typeof id === 'object' ? id._id : id;
-            
-            // 4. Мэргэжлийн жагсаалтаас хайх
             const match = mergejilList.find((m: any) => String(m._id) === String(currentId));
             return match ? match.mergejil_Ner : "Тодорхойгүй";
         });
@@ -80,8 +73,6 @@ export const TetgelegDataGrid: React.FC = () => {
 
     return (
         <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6">
-            
-            {/* Толгой хэсэг */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
                 <div>
                     <h1 className="text-2xl font-black text-slate-900 flex items-center gap-3">
@@ -108,8 +99,6 @@ export const TetgelegDataGrid: React.FC = () => {
                     </Button>
                 </div>
             </div>
-
-            {/* Хүснэгт */}
             <div className="bg-white rounded-[2rem] border border-slate-100 shadow-xl overflow-hidden">
                 <div className="overflow-x-auto">
                     <Table>
@@ -125,7 +114,6 @@ export const TetgelegDataGrid: React.FC = () => {
                         </TableHeader>
                         <TableBody>
                             {filteredList.map((item: any, index: number) => {
-                                // Таны өгөгдлийн сан дахь meregjilId-г ашиглаж байна
                                 const mNames = getMergejilList(item.meregjilId);
                                 
                                 return (
@@ -162,7 +150,6 @@ export const TetgelegDataGrid: React.FC = () => {
 
                                         <TableCell>
                                             <div className="font-black text-emerald-600 text-sm flex items-center gap-1">
-                                                <Percent className="w-3.5 h-3.5" />
                                                 {item.teteglegiin_Hemjee && String(item.teteglegiin_Hemjee).length > 4 
                                                     ? `${String(item.teteglegiin_Hemjee).substring(0, 4)}..` 
                                                     : item.teteglegiin_Hemjee}

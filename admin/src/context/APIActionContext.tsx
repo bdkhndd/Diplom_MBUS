@@ -1,5 +1,3 @@
-// admin/src/context/APIActionContext.tsx - 8 COLLECTIONS
-
 import React, { createContext, useContext, useReducer, type ReactNode } from "react";
 import type { 
     HamtarsanHutType, 
@@ -12,9 +10,6 @@ import type {
     FeedbackType
 } from '../api/types'; 
 
-// ===================================
-// STATE TYPE
-// ===================================
 type AppState = {
     tenhim: TenhimType[];
     mergejil: MergejilType[];
@@ -28,65 +23,59 @@ type AppState = {
     error: string | null;
 };
 
-// ===================================
-// ACTION TYPES
-// ===================================
 type ActionType = 
-    // TENHIM
+
     | { type: 'SET_TENHIM'; payload: TenhimType[] }
     | { type: 'ADD_TENHIM'; payload: TenhimType }
     | { type: 'UPDATE_TENHIM'; payload: TenhimType }
     | { type: 'DELETE_TENHIM'; payload: string }
     
-    // MERGEJIL
+    
     | { type: 'SET_MERGEJIL'; payload: MergejilType[] }
     | { type: 'ADD_MERGEJIL'; payload: MergejilType }
     | { type: 'UPDATE_MERGEJIL'; payload: MergejilType }
     | { type: 'DELETE_MERGEJIL'; payload: string }
     
-    // HAMTARSAN HUT
+    
     | { type: 'SET_HAMTARSAN_HUT'; payload: HamtarsanHutType[] }
     | { type: 'ADD_HAMTARSAN_HUT'; payload: HamtarsanHutType }
     | { type: 'UPDATE_HAMTARSAN_HUT'; payload: HamtarsanHutType }
     | { type: 'DELETE_HAMTARSAN_HUT'; payload: string }
     
-    // TETGELEG
+
     | { type: 'SET_TETGELEG'; payload: TetgelegType[] }
     | { type: 'ADD_TETGELEG'; payload: TetgelegType }
     | { type: 'UPDATE_TETGELEG'; payload: TetgelegType }
     | { type: 'DELETE_TETGELEG'; payload: string }
     
-    // TULBUR
+
     | { type: 'SET_TULBUR'; payload: TulburType[] }
     | { type: 'ADD_TULBUR'; payload: TulburType }
     | { type: 'UPDATE_TULBUR'; payload: TulburType }
     | { type: 'DELETE_TULBUR'; payload: string }
     
-    // VIDEO
+
     | { type: 'SET_VIDEO'; payload: VideoType[] }
     | { type: 'ADD_VIDEO'; payload: VideoType }
     | { type: 'UPDATE_VIDEO'; payload: VideoType }
     | { type: 'DELETE_VIDEO'; payload: string }
     
-    // CONTACT INFO
+
     | { type: 'SET_CONTACTINFO'; payload: ContactInfoType[] }
     | { type: 'ADD_CONTACTINFO'; payload: ContactInfoType }
     | { type: 'UPDATE_CONTACTINFO'; payload: ContactInfoType }
     | { type: 'DELETE_CONTACTINFO'; payload: string }
     
-    // FEEDBACK
+    
     | { type: 'SET_FEEDBACK'; payload: FeedbackType[] }
     | { type: 'ADD_FEEDBACK'; payload: FeedbackType }
     | { type: 'UPDATE_FEEDBACK'; payload: FeedbackType }
     | { type: 'DELETE_FEEDBACK'; payload: string }
     
-    // LOADING & ERROR
+    
     | { type: 'SET_LOADING'; payload: boolean }
     | { type: 'SET_ERROR'; payload: string | null };
 
-// ===================================
-// INITIAL STATE
-// ===================================
 const initialState: AppState = {
     tenhim: [],
     mergejil: [],
@@ -100,9 +89,6 @@ const initialState: AppState = {
     error: null,
 };
 
-// ===================================
-// REDUCER FUNCTION
-// ===================================
 const APIActionReducer = (state: AppState, action: ActionType): AppState => {
     switch (action.type) {
         // LOADING & ERROR
@@ -111,7 +97,7 @@ const APIActionReducer = (state: AppState, action: ActionType): AppState => {
         case 'SET_ERROR':
             return { ...state, error: action.payload };
 
-        // ===== TENHIM =====
+
         case 'SET_TENHIM':
             return { ...state, tenhim: action.payload };
         case 'ADD_TENHIM':
@@ -124,7 +110,7 @@ const APIActionReducer = (state: AppState, action: ActionType): AppState => {
         case 'DELETE_TENHIM':
             return { ...state, tenhim: state.tenhim.filter(item => item._id !== action.payload) };
 
-        // ===== MERGEJIL =====
+    
         case 'SET_MERGEJIL':
             return { ...state, mergejil: action.payload };
         case 'ADD_MERGEJIL':
@@ -137,7 +123,7 @@ const APIActionReducer = (state: AppState, action: ActionType): AppState => {
         case 'DELETE_MERGEJIL':
             return { ...state, mergejil: state.mergejil.filter(item => item._id !== action.payload) };
 
-        // ===== HAMTARSAN HUT =====
+     
         case 'SET_HAMTARSAN_HUT':
             return { ...state, hamtarsan_hut: action.payload };
         case 'ADD_HAMTARSAN_HUT':
@@ -150,7 +136,7 @@ const APIActionReducer = (state: AppState, action: ActionType): AppState => {
         case 'DELETE_HAMTARSAN_HUT':
             return { ...state, hamtarsan_hut: state.hamtarsan_hut.filter(item => item._id !== action.payload) };
 
-        // ===== TETGELEG =====
+       
         case 'SET_TETGELEG':
             return { ...state, tetgeleg: action.payload };
         case 'ADD_TETGELEG':
@@ -163,7 +149,7 @@ const APIActionReducer = (state: AppState, action: ActionType): AppState => {
         case 'DELETE_TETGELEG':
             return { ...state, tetgeleg: state.tetgeleg.filter(item => item._id !== action.payload) };
 
-        // ===== TULBUR =====
+   
         case 'SET_TULBUR':
             return { ...state, tulbur: action.payload };
         case 'ADD_TULBUR':
@@ -176,7 +162,7 @@ const APIActionReducer = (state: AppState, action: ActionType): AppState => {
         case 'DELETE_TULBUR':
             return { ...state, tulbur: state.tulbur.filter(item => item._id !== action.payload) };
 
-        // ===== VIDEO =====
+      
         case 'SET_VIDEO':
             return { ...state, video: action.payload };
         case 'ADD_VIDEO':
@@ -189,7 +175,7 @@ const APIActionReducer = (state: AppState, action: ActionType): AppState => {
         case 'DELETE_VIDEO':
             return { ...state, video: state.video.filter(item => item._id !== action.payload) };
 
-        // ===== CONTACT INFO =====
+       
         case 'SET_CONTACTINFO':
             return { ...state, contactinfo: action.payload };
         case 'ADD_CONTACTINFO':
@@ -202,7 +188,7 @@ const APIActionReducer = (state: AppState, action: ActionType): AppState => {
         case 'DELETE_CONTACTINFO':
             return { ...state, contactinfo: state.contactinfo.filter(item => item._id !== action.payload) };
 
-        // ===== FEEDBACK =====
+  
         case 'SET_FEEDBACK':
             return { ...state, feedback: action.payload };
         case 'ADD_FEEDBACK':
@@ -220,9 +206,6 @@ const APIActionReducer = (state: AppState, action: ActionType): AppState => {
     }
 };
 
-// ===================================
-// CONTEXT & PROVIDER
-// ===================================
 interface APIActionContextType {
     state: AppState;
     dispatch: React.Dispatch<ActionType>;

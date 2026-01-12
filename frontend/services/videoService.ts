@@ -1,11 +1,7 @@
 import { VideoType } from './types';
 
-// API хаягийг шууд энд зааж өгснөөр бусад файлаас хамааралгүй ажиллана
-export const API_BASE_URL = 'http://10.150.34.26:4000/api/video';
+export const API_BASE_URL = 'http://192.168.1.3:4000/api/video';
 
-/**
- * Бүх видеонуудыг авах
- */
 export const getAllVideos = async (): Promise<VideoType[]> => {
   try {
     const res = await fetch(API_BASE_URL, {
@@ -16,7 +12,6 @@ export const getAllVideos = async (): Promise<VideoType[]> => {
       }
     });
     
-    // Хариу JSON мөн эсэхийг шалгах
     const contentType = res.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       const text = await res.text();
@@ -28,7 +23,6 @@ export const getAllVideos = async (): Promise<VideoType[]> => {
     
     const result = await res.json();
     
-    // Backend { data: [...] } эсвэл шууд [...] буцаадаг бол алийг нь ч хүлээж авна
     const videos = result.data || result;
     
     return Array.isArray(videos) ? videos : [];
@@ -38,9 +32,6 @@ export const getAllVideos = async (): Promise<VideoType[]> => {
   }
 };
 
-/**
- * ID-аар нэг видеог авах
- */
 export const getVideoById = async (id: string): Promise<VideoType | null> => {
   if (!id) return null;
   try {

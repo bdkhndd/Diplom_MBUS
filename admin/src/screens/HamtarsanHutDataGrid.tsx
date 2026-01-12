@@ -67,7 +67,7 @@ export const HamtarsanHutDataGrid: React.FC = () => {
 
     return (
         <div className="max-w-7xl mx-auto p-4 md:p-8 bg-gray-50 min-h-screen">
-            {/* Header - Responsive Header */}
+        
             <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
                 <div className="text-center md:text-left">
                     <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight flex items-center gap-3 justify-center md:justify-start">
@@ -86,7 +86,7 @@ export const HamtarsanHutDataGrid: React.FC = () => {
                 </Button>
             </div>
 
-            {/* --- MOBILE VIEW (Картын харагдац) --- */}
+        
             <div className="grid grid-cols-1 gap-4 md:hidden">
                 {hutulburList.length > 0 ? (
                     hutulburList.map((hut, index) => (
@@ -113,7 +113,7 @@ export const HamtarsanHutDataGrid: React.FC = () => {
                 ) : <EmptyState />}
             </div>
 
-            {/* --- DESKTOP VIEW (Хүснэгтийн харагдац) --- */}
+          
             <div className="hidden md:block bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
                 <Table>
                     <TableHeader className="bg-gray-50/50">
@@ -163,7 +163,7 @@ export const HamtarsanHutDataGrid: React.FC = () => {
     );
 };
 
-// Туслах жижиг компонентууд
+
 const EmptyState = () => (
     <div className="flex flex-col items-center justify-center py-20 bg-white rounded-[2.5rem] border-2 border-dashed border-gray-100 w-full">
         <Info className="w-12 h-12 text-gray-200 mb-4" />

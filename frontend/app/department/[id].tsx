@@ -22,19 +22,21 @@ const InfoCard = ({ label, content }: { label: string, content: string | undefin
   </View>
 );
 export default function DepartmentDetailScreen() {
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams(); //параметрүүдийг id-д хадгална
   const tenhimId = Array.isArray(id) ? id[0] : id; 
+  // id массив бол эхний элементийг (id[0]) авна. 
+  // id нь ганц утгатай бол шууд id-ийг ашиглана.
 
-  const [tenhim, setTenhim] = useState<TenhimType | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+ 
+  const [tenhim, setTenhim] = useState<TenhimType | null>(null);  // Тэнхимийн мэдээллийг хадгалах state
+  const [isLoading, setIsLoading] = useState(true); // Loading төлөв (өгөгдөл татаж байгаа эсэх)
+  const [error, setError] = useState<string | null>(null);  // Алдааны мэдээлэл
 
   useEffect(() => {
     const fetchDetail = async () => {
       try {
         setIsLoading(true);
         const res = await getTenhimById(tenhimId);
-        // Backend { data: {...} } эсвэл шууд {...} буцааж байгааг шалгах
         const actualData = res.data ? res.data : res;
         setTenhim(actualData);
       } catch (e) {
@@ -63,7 +65,7 @@ export default function DepartmentDetailScreen() {
   if (!imagePath) return null;
 
   const cleanPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-  return `http://10.150.34.26:4000${cleanPath}`;
+  return `http://192.168.1.3:4000${cleanPath}`;
 };
 
 const imageUri = getFirstImage();

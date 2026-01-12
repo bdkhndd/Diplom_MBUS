@@ -1,7 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-// Хэрэв танд cn функц байхгүй бол энэ энгийн хувилбарыг ашиглаж болно
 function cn(...inputs: any[]) {
   return inputs.filter(Boolean).join(" ");
 }
@@ -32,7 +31,6 @@ export interface BadgeProps
 
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (
-    // Засвар: className-ийг зөв холбож, {...props}-ийг нэмсэн ингэснээр доторх бичиг нь харагдана
     <div 
       className={cn(badgeVariants({ variant }), className)} 
       {...props} 

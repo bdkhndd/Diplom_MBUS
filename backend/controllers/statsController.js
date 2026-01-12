@@ -11,7 +11,7 @@ const Video = require('../models/videoModel');
 // @route   GET /api/stats/counts
 const getCounts = async (req, res) => {
     try {
-        // ЧУХАЛ: Promise.all дотор БҮХ моделийг тоолж оруулна
+       
         const [
             feedback, 
             tenhim, 
@@ -26,10 +26,10 @@ const getCounts = async (req, res) => {
             Tenhim.countDocuments(),
             Mergejil.countDocuments(),
             Tetgeleg.countDocuments(),
-            Hamtarsan_hut.countDocuments(), // Нэмэгдсэн
-            Contact.countDocuments(),       // Нэмэгдсэн
-            Tulbur.countDocuments(),        // Нэмэгдсэн
-            Video.countDocuments()          // Нэмэгдсэн
+            Hamtarsan_hut.countDocuments(), 
+            Contact.countDocuments(),       
+            Tulbur.countDocuments(),        
+            Video.countDocuments()          
         ]);
 
         res.status(200).json({
@@ -39,7 +39,7 @@ const getCounts = async (req, res) => {
                 tenhim,
                 mergejil,
                 tetgeleg,
-                hamtarsan: hamtarsan_hut, // Frontend-ийн нэртэй тааруулав
+                hamtarsan: hamtarsan_hut, 
                 tulbur,
                 video,
                 contact

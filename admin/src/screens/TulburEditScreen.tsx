@@ -44,7 +44,7 @@ const TulburEditScreen: React.FC = () => {
                 
                 const current = tList.find((t: TulburType) => t._id === id);
                 if (current) {
-                    // Хэрэв meregjilId нь объект хэлбэрээр (Populated) ирж байвал ID-нуудыг нь салгаж авах
+                  
                     const formatIds = (ids: any[]) => ids.map(item => typeof item === 'object' ? item._id : item);
                     
                     setFormData({
@@ -112,7 +112,6 @@ const TulburEditScreen: React.FC = () => {
 
                 <form onSubmit={handleSubmit} className="p-8 md:p-12 space-y-10">
                     
-                    {/* 1. Тэргүүлэх эрэлттэй */}
                     <div className="space-y-6">
                         <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
                             <Badge className="bg-green-500">1</Badge> Тэргүүлэх эрэлттэй мэргэжил
@@ -122,7 +121,7 @@ const TulburEditScreen: React.FC = () => {
                                 <Label className="font-bold">Мэргэжилүүд</Label>
                              <MultiSelectMenu 
                             items={mergejilList.map(m => ({ label: m.mergejil_Ner, value: m._id! }))}
-                            // meregjilId-г хүчээр string[] төрөлтэй гэж зааж өгөх
+                       
                             selectedValues={formData.terguuleh_erelttei.meregjilId as string[]} 
                             onValueChange={(vals) => setFormData({
                                 ...formData, 
@@ -148,7 +147,6 @@ const TulburEditScreen: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* 2. Бусад мэргэжил */}
                     <div className="space-y-6">
                         <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
                             <Badge className="bg-blue-500">2</Badge> Бусад мэргэжил
@@ -158,7 +156,7 @@ const TulburEditScreen: React.FC = () => {
                                 <Label className="font-bold">Мэргэжилүүд</Label>
                                 <MultiSelectMenu 
                                 items={mergejilList.map(m => ({ label: m.mergejil_Ner, value: m._id! }))}
-                                // Type Assertion ашиглан string[] гэдгийг батлах
+                             
                                 selectedValues={(formData.busad_mergejil.meregjilId as string[]) || []} 
                                 onValueChange={(vals) => setFormData({
                                     ...formData, 
@@ -184,7 +182,6 @@ const TulburEditScreen: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* 3. Задаргаа */}
                     <div className="space-y-6">
                         <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
                             <LayoutGrid className="text-purple-600" /> Төлбөрийн задаргаа

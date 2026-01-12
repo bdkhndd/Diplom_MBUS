@@ -21,7 +21,7 @@ router.get('/:id', async (req, res) => {
             .populate('busad_mergejil.meregjilId');
         
         if (!tulbur) {
-            return res.status(404).json({ error: 'Түлбүр олдсонгүй' });
+            return res.status(404).json({ error: 'Төлбөр олдсонгүй' });
         }
         res.json({ data: tulbur });
     } catch (error) {
@@ -29,7 +29,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// POST шинэ түлбүр
 router.post('/', async (req, res) => {
     try {
         const tulbur = new Tulbur(req.body);
@@ -42,7 +41,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// PUT түлбүр шинэчлэх
 router.put('/:id', async (req, res) => {
     try {
         const tulbur = await Tulbur.findByIdAndUpdate(
@@ -53,7 +51,7 @@ router.put('/:id', async (req, res) => {
          .populate('busad_mergejil.meregjilId');
         
         if (!tulbur) {
-            return res.status(404).json({ error: 'Түлбүр олдсонгүй' });
+            return res.status(404).json({ error: 'Төлбөр олдсонгүй' });
         }
         res.json({ data: tulbur });
     } catch (error) {

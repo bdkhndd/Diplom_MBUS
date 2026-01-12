@@ -1,8 +1,6 @@
 import * as React from "react";
-import { cn } from "../../lib/utils"; // Таны utility функцийг импортлох
+import { cn } from "../../lib/utils"; 
 
-// Card Component
-// Үндсэн гаднах хэлбэр (background, border, shadow, rounded)
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -10,7 +8,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-xl", // bg-white, border, shadow-xl
+      "rounded-lg border bg-card text-card-foreground shadow-xl", 
       className
     )}
     {...props}
@@ -18,8 +16,6 @@ const Card = React.forwardRef<
 ));
 Card.displayName = "Card";
 
-// Card Header
-// Картын дээд хэсэг (Padding, Flex layout)
 const CardHeader = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -32,8 +28,6 @@ const CardHeader = React.forwardRef<
 ));
 CardHeader.displayName = "CardHeader";
 
-// Card Title
-// Гарчиг (Font size, weight)
 const CardTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
@@ -49,8 +43,6 @@ const CardTitle = React.forwardRef<
 ));
 CardTitle.displayName = "CardTitle";
 
-// Card Content
-// Картын үндсэн агуулга
 const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -59,5 +51,4 @@ const CardContent = React.forwardRef<
 ));
 CardContent.displayName = "CardContent";
 
-// Exports
 export { Card, CardHeader, CardTitle, CardContent };

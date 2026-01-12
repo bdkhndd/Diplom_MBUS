@@ -7,7 +7,7 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://10.150.34.26:4000/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://192.168.1.3:4000/api';
 
 type Message = {
     content: string;
@@ -15,9 +15,10 @@ type Message = {
 };
 
 export const TenhimCreateScreen: React.FC = () => {
-    const { dispatch } = useAPIActions();
+    const { dispatch } = useAPIActions(); 
     const navigate = useNavigate();
     
+    // Формын датаг хадгалах state
     const [formData, setFormData] = useState({
         ner: '',
         tergvvleh_chiglel: '',
@@ -26,18 +27,21 @@ export const TenhimCreateScreen: React.FC = () => {
         tailbar: '',
     });
 
+    // Зургийн файл болон харагдах байдлыг (preview) хадгалах state-үүд
     const [coverImage, setCoverImage] = useState<File | null>(null);
     const [detailImage, setDetailImage] = useState<File | null>(null);
     const [coverPreview, setCoverPreview] = useState<string>('');
     const [detailPreview, setDetailPreview] = useState<string>('');
-    const [message, setMessage] = useState<Message | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [message, setMessage] = useState<Message | null>(null); 
+    const [isSubmitting, setIsSubmitting] = useState(false); 
 
+    // Input-уудыг удирдах ref-үүд
     const coverInputRef = useRef<HTMLInputElement>(null);
     const detailInputRef = useRef<HTMLInputElement>(null);
 
-    // 📸 ЗУРАГ СОНГОХ
+    // Зураг сонгох үед ажиллах функц
     const handleImageSelect = (file: File, type: 'cover' | 'detail') => {
+        // Файлын төрөл шалгах
         if (!file.type.startsWith('image/')) {
             setMessage({ 
                 content: 'Зөвхөн зураг файл сонгоно уу!', 
@@ -46,6 +50,7 @@ export const TenhimCreateScreen: React.FC = () => {
             return;
         }
 
+        // Файлын хэмжээ шалгах (5MB)
         if (file.size > 5 * 1024 * 1024) {
             setMessage({ 
                 content: 'Зургийн хэмжээ 5MB-аас бага байх ёстой!', 
@@ -54,6 +59,7 @@ export const TenhimCreateScreen: React.FC = () => {
             return;
         }
 
+        // Зургийг уншиж preview болгох
         const reader = new FileReader();
         reader.onloadend = () => {
             if (type === 'cover') {
@@ -67,7 +73,7 @@ export const TenhimCreateScreen: React.FC = () => {
         reader.readAsDataURL(file);
     };
 
-    // 📸 ЗУРАГ АРИЛГАХ
+    // Сонгосон зургийг устгах функц
     const handleRemoveImage = (type: 'cover' | 'detail') => {
         if (type === 'cover') {
             setCoverImage(null);
@@ -80,25 +86,26 @@ export const TenhimCreateScreen: React.FC = () => {
         }
     };
 
-    // 💾 ХАДГАЛАХ
+    // Форм илгээх функц
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setMessage(null);
         setIsSubmitting(true);
 
         try {
+            // FormData ашиглан файл болон текст датаг бэлдэх
             const formDataToSend = new FormData();
             
-            // Текст талбарууд
+            // Текст мэдээллүүдийг нэмэх
             Object.entries(formData).forEach(([key, value]) => {
                 if (value) formDataToSend.append(key, value);
             });
 
-            // Зургууд
+            // Зургуудыг нэмэх
             if (coverImage) formDataToSend.append('coverImage', coverImage);
             if (detailImage) formDataToSend.append('detailImage', detailImage);
 
-            // API дуудах
+            // Хэрэв зураг байвал upload хаяг руу, үгүй бол энгийн хаяг руу хандах
             const endpoint = (coverImage || detailImage)
                 ? `${BASE_URL}/tenhim/upload`
                 : `${BASE_URL}/tenhim`;
@@ -114,13 +121,15 @@ export const TenhimCreateScreen: React.FC = () => {
                 throw new Error(result.error || 'Алдаа гарлаа');
             }
 
+            // Context-д шинэ тэнхимийг нэмэх
             dispatch({ type: 'ADD_TENHIM', payload: result.data });
 
             setMessage({
-                content: `✅ Тэнхим "${result.data.ner}" амжилттай үүсгэгдлээ!`,
+                content: ` Тэнхим "${result.data.ner}" амжилттай үүсгэгдлээ!`,
                 type: 'success',
             });
 
+            // 1.5 секундын дараа жагсаалтын хуудас руу шилжих
             setTimeout(() => navigate('/tenhim'), 1500);
             
         } catch (error) {
@@ -136,7 +145,7 @@ export const TenhimCreateScreen: React.FC = () => {
 
     return (
         <div className="p-3 sm:p-4 lg:p-8 max-w-4xl mx-auto">
-            {/* 🔙 БУЦАХ ТОВЧ */}
+            {/* Буцах товч */}
             <button 
                 onClick={() => navigate('/tenhim')}
                 className="mb-6 flex items-center space-x-2 text-orange-600 hover:text-orange-700 transition p-2 rounded hover:bg-orange-50"
@@ -145,10 +154,9 @@ export const TenhimCreateScreen: React.FC = () => {
                 <span className="text-sm sm:text-base">Жагсаалт руу буцах</span>
             </button>
             
-            {/* 📋 ГАРЧИГ */}
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">🏛️ Шинэ Тэнхим Үүсгэх</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">Шинэ Тэнхим Үүсгэх</h1>
             
-            {/* ✅ МЕССЭЖ */}
+            {/* Мэдэгдэл харуулах хэсэг */}
             {message && (
                 <div 
                     className={`p-4 mb-6 rounded-lg font-semibold text-sm sm:text-base ${
@@ -161,15 +169,15 @@ export const TenhimCreateScreen: React.FC = () => {
                 </div>
             )}
             
-            {/* 📝 ФОРМ */}
+            {/* Тэнхим үүсгэх форм */}
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-4 sm:p-6 lg:p-8 rounded-xl shadow-lg border">
-                
-                {/* 🖼️ ЗУРГУУДЫГ СОНГОХ */}
+               
+                {/* Зураг оруулах хэсэг */}
                 <div className="border-b pb-6">
                     <h3 className="text-lg font-semibold text-gray-700 mb-4">📸 Зургууд Сонгох</h3>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                        {/* НҮҮР ЗУРАГ */}
+                        {/* Нүүр зураг (Cover) */}
                         <div>
                             <Label className="text-sm sm:text-base font-semibold mb-2 block">
                                 Нүүр Зураг (Cover)
@@ -198,10 +206,9 @@ export const TenhimCreateScreen: React.FC = () => {
                                         alt="Нүүр Preview" 
                                         className="w-full h-40 sm:h-48 object-cover rounded-md"
                                     />
-                                    <p className="text-xs text-orange-600 mt-2 text-center">✅ Сонгогдлоо</p>
+                                    <p className="text-xs text-orange-600 mt-2 text-center">Сонгогдлоо</p>
                                 </div>
                             )}
-                            
                             <input
                                 ref={coverInputRef}
                                 type="file"
@@ -211,7 +218,7 @@ export const TenhimCreateScreen: React.FC = () => {
                             />
                         </div>
 
-                        {/* ҮНДСЭН ЗУРАГ */}
+                        {/* Үндсэн зураг (Detail) */}
                         <div>
                             <Label className="text-sm sm:text-base font-semibold mb-2 block">
                                 Үндсэн Зураг (Detail)
@@ -240,10 +247,9 @@ export const TenhimCreateScreen: React.FC = () => {
                                         alt="Үндсэн Preview" 
                                         className="w-full h-40 sm:h-48 object-cover rounded-md"
                                     />
-                                    <p className="text-xs text-orange-600 mt-2 text-center">✅ Сонгогдлоо</p>
+                                    <p className="text-xs text-orange-600 mt-2 text-center">Сонгогдлоо</p>
                                 </div>
                             )}
-                            
                             <input
                                 ref={detailInputRef}
                                 type="file"
@@ -255,13 +261,10 @@ export const TenhimCreateScreen: React.FC = () => {
                     </div>
                 </div>
 
-                {/* 📝 ТЕКСТ ТАЛБАРУУД */}
+                {/* Текст мэдээлэл оруулах хэсэг */}
                 <div className="space-y-4">
-                    {/* ТЭНХИМИЙН НЭР */}
                     <div>
-                        <Label htmlFor="ner" className="text-sm font-medium">
-                            Тэнхимийн Нэр *
-                        </Label>
+                        <Label htmlFor="ner" className="text-sm font-medium">Тэнхимийн Нэр *</Label>
                         <Input
                             id="ner"
                             value={formData.ner}
@@ -273,11 +276,8 @@ export const TenhimCreateScreen: React.FC = () => {
                         />
                     </div>
 
-                    {/* ТЭРГҮҮЛЭХ ЧИГЛЭЛ */}
                     <div>
-                        <Label htmlFor="tergvvleh_chiglel" className="text-sm font-medium">
-                            Тэргүүлэх Чиглэл *
-                        </Label>
+                        <Label htmlFor="tergvvleh_chiglel" className="text-sm font-medium">Тэргүүлэх Чиглэл *</Label>
                         <Input
                             id="tergvvleh_chiglel"
                             value={formData.tergvvleh_chiglel}
@@ -289,11 +289,8 @@ export const TenhimCreateScreen: React.FC = () => {
                         />
                     </div>
 
-                    {/* ШАГНАЛ */}
                     <div>
-                        <Label htmlFor="shagnal" className="text-sm font-medium">
-                            Томоохон Шагнал / Амжилт
-                        </Label>
+                        <Label htmlFor="shagnal" className="text-sm font-medium">Томоохон Шагнал / Амжилт</Label>
                         <Input
                             id="shagnal"
                             value={formData.shagnal}
@@ -304,11 +301,8 @@ export const TenhimCreateScreen: React.FC = () => {
                         />
                     </div>
 
-                    {/* БҮТЭЭЛ */}
                     <div>
-                        <Label htmlFor="bvteel" className="text-sm font-medium">
-                            Бүтээл / Эрдэм Шинжилгээний Ажил
-                        </Label>
+                        <Label htmlFor="bvteel" className="text-sm font-medium">Бүтээл / Эрдэм Шинжилгээний Ажил</Label>
                         <Textarea
                             id="bvteel"
                             value={formData.bvteel}
@@ -320,11 +314,8 @@ export const TenhimCreateScreen: React.FC = () => {
                         />
                     </div>
 
-                    {/* ТАЙЛБАР */}
                     <div>
-                        <Label htmlFor="tailbar" className="text-sm font-medium">
-                            Нэмэлт Тайлбар
-                        </Label>
+                        <Label htmlFor="tailbar" className="text-sm font-medium">Нэмэлт Тайлбар</Label>
                         <Textarea
                             id="tailbar"
                             value={formData.tailbar}
@@ -337,14 +328,14 @@ export const TenhimCreateScreen: React.FC = () => {
                     </div>
                 </div>
 
-                {/* 🔘 SUBMIT BUTTON */}
+                {/* Илгээх товч */}
                 <Button 
                     type="submit" 
                     disabled={isSubmitting}
                     className="w-full py-3 px-4 rounded-lg text-white font-semibold transition duration-150 text-sm sm:text-base
                                bg-orange-600 hover:bg-orange-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
-                    {isSubmitting ? '⏳ Үүсгэж байна...' : '✅ Тэнхим Үүсгэх'}
+                    {isSubmitting ? 'Үүсгэж байна...' : 'Тэнхим Үүсгэх'}
                 </Button>
             </form>
         </div>

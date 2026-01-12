@@ -28,7 +28,7 @@ export const VideoDataGrid: React.FC = () => {
         const fetchVideos = async () => {
             try {
                 const res = await getVideo();
-                // Backend-ээс { data: [...] } хэлбэрээр ирж байгаа бол
+               
                 const data = (res as any).data || res;
                 dispatch({ type: 'SET_VIDEO', payload: data });
             } catch (error) {
@@ -49,7 +49,7 @@ export const VideoDataGrid: React.FC = () => {
         }
     };
 
-    // Хайлт хийх логик
+ 
     const filteredVideos = videoList.filter(v => 
         v.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -65,7 +65,7 @@ export const VideoDataGrid: React.FC = () => {
 
     return (
         <div className="p-6 md:p-10 space-y-8 bg-slate-50/50 min-h-screen">
-            {/* Header Хэсэг */}
+         
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 bg-white p-8 rounded-[3rem] shadow-sm border border-slate-100">
                 <div className="space-y-1">
                     <h1 className="text-3xl font-black uppercase tracking-tighter text-slate-800 flex items-center gap-3">
@@ -93,12 +93,12 @@ export const VideoDataGrid: React.FC = () => {
                 </div>
             </div>
 
-            {/* Grid Хэсэг */}
+      
             {filteredVideos.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {filteredVideos.map((v) => (
                         <Card key={v._id} className="rounded-[3rem] border-none shadow-2xl shadow-slate-200/40 overflow-hidden bg-white group hover:-translate-y-2 transition-all duration-300">
-                            {/* Видео Превью (Thumbnail-гүй үед #t=0.1 ашиглана) */}
+                      
                             <div className="aspect-video bg-slate-900 relative flex items-center justify-center overflow-hidden">
                                 <video 
                                     src={`${import.meta.env.VITE_API_URL}/${v.videoUrl}#t=0.1`} 

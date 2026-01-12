@@ -33,7 +33,7 @@ import Animated, {
     FadeOut 
 } from 'react-native-reanimated';
 
-const SMALL_LOGO = require('../../assets/images/logo_small.png'); 
+const SMALL_LOGO = require('../../assets/images/logo.png'); 
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.45; 
@@ -46,9 +46,7 @@ const DIDACTIC_IMG = require('../../assets/images/tenhim/didactic.jpg');
 const PHYSICS_IMG = require('../../assets/images/tenhim/physics.png'); 
 const GEOGRAPHY_IMG = require('../../assets/images/tenhim/geography.png'); 
 
-const router = useRouter() as any;
-
-// zurgiig nerr oloh func
+// Тэнхимийн зургийг нэрээр олох функц
 const getTenhimImage = (name: string): any => { 
     const lowerName = name.toLowerCase();
     if (lowerName.includes('биологи')) return BIOLOGY_IMG; 
@@ -60,19 +58,24 @@ const getTenhimImage = (name: string): any => {
     if (lowerName.includes('газарзүй')) return GEOGRAPHY_IMG; 
     return CHEMISTRY_IMG;
 };
-const BASE_URL = 'http://10.150.34.26:4000'; 
+
+const BASE_URL = 'http://192.168.1.3:4000'; 
+
+// Menu Items Constant
+const homeMenuItems = [
+    { id: '1', title: 'Мэргэжил', icon: 'school-outline' },
+    { id: '2', title: 'Тэтгэлэг', icon: 'trophy-outline' }, 
+    { id: '3', title: 'Хамтарсан хөтөлбөр', icon: 'people-outline' },
+    { id: '4', title: 'Сургалтын төлбөр', icon: 'wallet-outline' },
+    { id: '5', title: 'Видео зөвлөмж', icon: 'videocam-outline' },
+];
 
 interface TenhimCardProps { item: TenhimType; }
 const TenhimCard: React.FC<TenhimCardProps> = ({ item }) => {
     const router = useRouter(); 
-    
-    // 1. Backend-ээс ирсэн зургийн замыг бэлдэх
-    // item.zurag нь массив тул 0-р индексийг шалгана
     const backendImage = item.zurag && item.zurag.length > 0 
         ? { uri: `${BASE_URL}${item.zurag[0]}` } 
         : null;
-
-    // 2. Хэрэв Backend-ээс зураг байхгүй бол нэрээр нь статик зураг сонгох (Fallback)
     const fallbackImage = getTenhimImage(item.ner); 
 
     const handlePress = () => {
@@ -82,7 +85,6 @@ const TenhimCard: React.FC<TenhimCardProps> = ({ item }) => {
     return (
         <TouchableOpacity onPress={handlePress} style={cardStyles.card}>
             <Image 
-                // Backend-ийн зураг байвал түүнийг, байхгүй бол статик зургийг харуулна
                 source={backendImage ? backendImage : fallbackImage} 
                 style={cardStyles.image} 
                 resizeMode="cover"
@@ -92,50 +94,19 @@ const TenhimCard: React.FC<TenhimCardProps> = ({ item }) => {
     );
 };
 
-// menu 
-const homeMenuItems = [
-    { id: '1', title: 'Мэргэжил', icon: 'school-outline' },
-    { id: '2', title: 'Тэтгэлэг', icon: 'trophy-outline' }, 
-    { id: '3', title: 'Хамтарсан хөтөлбөр', icon: 'people-outline' },
-    { id: '4', title: 'Сургалтын төлбөр', icon: 'wallet-outline' },
-    { id: '5', title: 'Видео зөвлөмж', icon: 'videocam-outline' },
-];
-
 const MenuItem = ({ item, index, isLast }: { item: typeof homeMenuItems[0], index: number, isLast: boolean }) => {
     const router = useRouter(); 
 
     const handlePress = () => {
-        if (item.title === 'Мэргэжил') {
-            router.push('/programs'); 
-        } else if (item.title === 'Тэтгэлэг') {
-           
-            router.push('/scholarship'); 
-        } else if (item.title === 'Хамтарсан хөтөлбөр') {
-            
-            router.push('/collaborative'); 
-        
-        }else if (item.title === 'Сургалтын төлбөр') {
-            
-            router.push('/payment'); 
-        }else if (item.title === 'Видео зөвлөмж') {
-            
-            router.push('/video'); 
-        }
-        else {
-            console.log(`Навигацийн логик "${item.title}" хэсэгт нэмэгдэнэ.`);
-        }
+        if (item.title === 'Мэргэжил') router.push('/programs'); 
+        else if (item.title === 'Тэтгэлэг') router.push('/scholarship'); 
+        else if (item.title === 'Хамтарсан хөтөлбөр') router.push('/collaborative'); 
+        else if (item.title === 'Сургалтын төлбөр') router.push('/payment'); 
+        else if (item.title === 'Видео зөвлөмж') router.push('/video'); 
     };
 
-    
-
     return (
-        <Animated.View
-            entering={
-                FadeInDown.duration(400)
-                .delay(index * 100)
-                .easing(Easing.out(Easing.ease))
-            }
-        >
+        <Animated.View entering={FadeInDown.duration(400).delay(index * 100).easing(Easing.out(Easing.ease))}>
             <TouchableOpacity 
                 style={[menuStyles.menuItem, isLast && menuStyles.lastItem]} 
                 activeOpacity={0.8}
@@ -151,10 +122,15 @@ const MenuItem = ({ item, index, isLast }: { item: typeof homeMenuItems[0], inde
 };
 
 export default function HomeScreen() {
+    const router = useRouter();
     const [departments, setDepartments] = useState<TenhimType[]>([]);
     const [isLoading, setIsLoading] = useState(false); 
     const [error, setError] = useState<string | null>(null);
-    
+
+    // Хайлтын State-үүд
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredDepartments, setFilteredDepartments] = useState<TenhimType[]>([]);
+    const [filteredMenu, setFilteredMenu] = useState(homeMenuItems);
 
     const loadData = async () => {
         setIsLoading(true);
@@ -162,20 +138,37 @@ export default function HomeScreen() {
         try {
             const tenhims = await getTenhim(); 
             setDepartments(tenhims); 
+            setFilteredDepartments(tenhims); // Анхны өгөгдлийг тохируулах
         } catch (e) {
             console.error("Мэдээлэл татахад алдаа гарлаа:", e);
             setDepartments([]); 
-            setError(e instanceof Error ? e.message : "Үл мэдэгдэх сүлжээний алдаа. Сервер талыг шалгана уу.");
+            setError(e instanceof Error ? e.message : "Сүлжээний алдаа");
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleSearch = (text: string) => {
+        setSearchQuery(text);
+        const lowerText = text.toLowerCase();
+
+        // Тэнхим шүүх
+        const filteredT = departments.filter((item) =>
+            item.ner.toLowerCase().includes(lowerText)
+        );
+        setFilteredDepartments(filteredT);
+
+        // Цэс шүүх
+        const filteredM = homeMenuItems.filter((item) =>
+            item.title.toLowerCase().includes(lowerText)
+        );
+        setFilteredMenu(filteredM);
     };
 
     useEffect(() => {
         loadData();
     }, []); 
 
-    // loading boln error
     if (isLoading) {
         return (
             <View style={styles.fullScreenCenter}>
@@ -187,9 +180,11 @@ export default function HomeScreen() {
     if (error) {
         return (
             <View style={styles.fullScreenCenter}>
-                <Text style={styles.errorText}>Мэдээлэл татахад алдаа гарлаа:</Text>
+                <Text style={styles.errorText}>Алдаа гарлаа:</Text>
                 <Text style={styles.errorTextDetail}>{error}</Text>
-                <Text style={styles.hintText}>Сервер ажиллаж байгаа эсэх болон API-ийн замыг шалгана уу.</Text>
+                <TouchableOpacity onPress={loadData} style={{marginTop: 20}}>
+                    <Text style={{color: PRIMARY_COLOR}}>Дахин оролдох</Text>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -204,57 +199,65 @@ export default function HomeScreen() {
             >
                 <View style={styles.contentShadowWrapper}> 
                     <View style={styles.contentContainer}> 
-                        
                         <Text style={styles.sectionHeader}>Тэнхимүүд</Text>
                         
-                        {/* tenhimvvdn jagsaalt */}
                         <FlatList
-                            data={departments}
+                            data={filteredDepartments} // Шүүгдсэн дата
                             keyExtractor={(item) => item._id!}
                             renderItem={({ item }) => <TenhimCard item={item} />}
                             horizontal={true} 
                             showsHorizontalScrollIndicator={false}
                             contentContainerStyle={styles.horizontalList}
-                            ListEmptyComponent={() => <Text style={styles.noDataText}>Мэдээлэл олдсонгүй.</Text>}
+                            ListEmptyComponent={() => <Text style={styles.noDataText}>Тэнхим олдсонгүй.</Text>}
                         />
                         
-                        {/* menu */}
-                       <View style={menuStyles.menuContainer}>
-    {homeMenuItems.map((item, index) => (
-        <MenuItem 
-            key={item.id} 
-            item={item} 
-            index={index} 
-            isLast={index === homeMenuItems.length - 1} 
-        />
-    ))}
-</View>
+                        <View style={menuStyles.menuContainer}>
+                            {filteredMenu.length > 0 ? (
+                                filteredMenu.map((item, index) => (
+                                    <MenuItem 
+                                        key={item.id} 
+                                        item={item} 
+                                        index={index} 
+                                        isLast={index === filteredMenu.length - 1} 
+                                    />
+                                ))
+                            ) : (
+                                <Text style={styles.noDataText}>Цэс олдсонгүй.</Text>
+                            )}
+                        </View>
                         
-                        {/* dood taln zai */}
                         <View style={{ height: 200 }} /> 
                     </View>
                 </View>
             </ScrollView>
 
-            {/* header */}
+            {/* Custom Header */}
             <View style={headerStyles.customHeader}>
                 <View style={headerStyles.headerRow}>
                     <Image source={SMALL_LOGO} style={headerStyles.logo} resizeMode="contain" />
                     
-                    
                     <View style={headerStyles.searchContainer}>
                         <Ionicons name="search" size={20} color="#999" />
-                        <TextInput placeholder="Хайх" placeholderTextColor="#999" style={headerStyles.searchInput} />
+                        <TextInput 
+                            placeholder="Хайх" 
+                            placeholderTextColor="#999" 
+                            style={headerStyles.searchInput} 
+                            value={searchQuery}
+                            onChangeText={handleSearch}
+                        />
                     </View>
                     
                     <TouchableOpacity 
                         style={headerStyles.notificationIcon}
-                        onPress={
-                            () => 
-                             router.push('/feedback' as any)} // Санал хүсэлтийн хуудас руу үсрэх
-        >
-            <Ionicons name="chatbubble-ellipses-outline" size={26} color="#fff" />
-        </TouchableOpacity>
+                        onPress={() => {
+                            router.push({
+                                pathname: "/contactinfo",
+                                params: { mode: "feedback" }
+                            } as any);
+                        }}
+                    >
+                        <Ionicons name="chatbubble-ellipses-outline" size={26} color="#fff" />
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>

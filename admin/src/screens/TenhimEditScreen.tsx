@@ -8,7 +8,7 @@ import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import type { TenhimType } from '../api';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://10.150.34.26:4000/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://192.168.1.3:4000/api';
 const IMAGE_BASE_URL = BASE_URL.replace('/api', '');
 
 type Message = {
@@ -17,9 +17,9 @@ type Message = {
 };
 
 const TenhimEditScreen: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
-    const { state, dispatch } = useAPIActions();
+    const { id } = useParams<{ id: string }>(); 
+    const navigate = useNavigate(); 
+    const { state, dispatch } = useAPIActions(); 
     
     const [formData, setFormData] = useState({
         ner: '',
@@ -40,9 +40,10 @@ const TenhimEditScreen: React.FC = () => {
     const coverInputRef = useRef<HTMLInputElement>(null);
     const detailInputRef = useRef<HTMLInputElement>(null);
 
+    // Context доторх жагсаалтаас тухайн ID-тай тэнхимийг хайж олох
     const tenhim = state.tenhim?.find((t: TenhimType) => t._id === id);
 
-    // 📚 ӨГӨГДӨЛ АЧААЛАХ
+    // Хуудас ачаалагдах үед өгөгдлийг формын талбарт оноох
     useEffect(() => {
         if (tenhim) {
             setFormData({
@@ -53,6 +54,7 @@ const TenhimEditScreen: React.FC = () => {
                 tailbar: tenhim.tailbar || '',
             });
 
+            // Хэрэв өмнө нь зургууд байсан бол preview-д тохируулж байна
             if (Array.isArray(tenhim.zurag)) {
                 if (tenhim.zurag[0]) {
                     setCoverPreview(`${IMAGE_BASE_URL}${tenhim.zurag[0]}`);
@@ -63,7 +65,8 @@ const TenhimEditScreen: React.FC = () => {
             }
             setIsLoading(false);
         } else if (id) {
-            // Fetch from API if not in state
+          
+            // Хэрэв Context-д байхгүй бол серверээс шууд татах
             const fetchTenhim = async () => {
                 try {
                     const response = await fetch(`${BASE_URL}/tenhim/${id}`);
@@ -98,7 +101,9 @@ const TenhimEditScreen: React.FC = () => {
         }
     }, [tenhim, id, navigate]);
 
+    // Шинээр зураг сонгоход ажиллах
     const handleImageSelect = (file: File, type: 'cover' | 'detail') => {
+        // Файлын төрөл шалгах
         if (!file.type.startsWith('image/')) {
             setMessage({ 
                 content: 'Зөвхөн зураг файл сонгоно уу!', 
@@ -107,6 +112,7 @@ const TenhimEditScreen: React.FC = () => {
             return;
         }
 
+        // Хэмжээ 
         if (file.size > 5 * 1024 * 1024) {
             setMessage({ 
                 content: 'Зургийн хэмжээ 5MB-аас бага байх ёстой!', 
@@ -115,6 +121,7 @@ const TenhimEditScreen: React.FC = () => {
             return;
         }
 
+        // FileReader ашиглан дэлгэцэнд харуулах preview URL үүсгэх
         const reader = new FileReader();
         reader.onloadend = () => {
             if (type === 'cover') {
@@ -128,6 +135,7 @@ const TenhimEditScreen: React.FC = () => {
         reader.readAsDataURL(file);
     };
 
+    // Зураг устгах 
     const handleRemoveImage = (type: 'cover' | 'detail') => {
         if (type === 'cover') {
             setCoverImage(null);
@@ -140,32 +148,31 @@ const TenhimEditScreen: React.FC = () => {
         }
     };
 
+    // Формыг илгээх 
     const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
     setIsSubmitting(true);
 
     try {
+        // Зураг болон текст мэдээллийг хамт илгээхийн тулд FormData ашиглаж байна
         const formDataToSend = new FormData();
         
-        // Текст мэдээллүүдийг нэмэх
         Object.entries(formData).forEach(([key, value]) => {
             formDataToSend.append(key, value);
         });
 
-        // Сонгогдсон шинэ зургуудыг нэмэх
+        // шинээр зураг сонгосон бол нэмж байна
         if (coverImage) formDataToSend.append('coverImage', coverImage);
         if (detailImage) formDataToSend.append('detailImage', detailImage);
 
-        // Үргэлж /upload төгсгөлтэй зам руу хандана (Backend-тэй тааруулж)
         const endpoint = `${BASE_URL}/tenhim/${id}/upload`;
 
         const response = await fetch(endpoint, {
             method: 'PUT',
-            body: formDataToSend, // FormData явуулж байгаа тул Header-т Content-Type тохируулах хэрэггүй
+            body: formDataToSend, 
         });
 
-        // Хариуг текстээр авч шалгах (JSON биш байх магадлалтай үед)
         const responseText = await response.text();
         let result;
         try {
@@ -179,13 +186,15 @@ const TenhimEditScreen: React.FC = () => {
             throw new Error(result.error || 'Алдаа гарлаа');
         }
 
+        // Context доторх датаг шинэчлэх 
         dispatch({ type: 'UPDATE_TENHIM', payload: result.data });
 
         setMessage({
-            content: `✅ Тэнхим амжилттай шинэчлэгдлээ!`,
+            content: `Тэнхим амжилттай шинэчлэгдлээ!`,
             type: 'success',
         });
 
+        // 1.5 секундын дараа жагсаалт руу буцах
         setTimeout(() => navigate('/tenhim'), 1500);
         
     } catch (error) {
@@ -199,6 +208,7 @@ const TenhimEditScreen: React.FC = () => {
     }
 };
 
+    // Өгөгдөл ачаалж байх үед харагдах хэсэг
     if (isLoading) {
         return (
             <div className="p-8 text-center text-gray-500">
@@ -207,6 +217,7 @@ const TenhimEditScreen: React.FC = () => {
         );
     }
 
+    // Тэнхим олдохгүй бол харуулах хэсэг
     if (!tenhim && !formData.ner) {
         return (
             <div className="p-8 text-center text-red-500">
@@ -225,8 +236,9 @@ const TenhimEditScreen: React.FC = () => {
                 <span className="text-sm sm:text-base">Жагсаалт руу буцах</span>
             </button>
             
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">✏️ Тэнхим Засах</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">Тэнхим Засах</h1>
             
+            {/* Амжилттай эсвэл алдааны мессеж харуулах хэсэг */}
             {message && (
                 <div 
                     className={`p-4 mb-6 rounded-lg font-semibold text-sm sm:text-base ${
@@ -239,14 +251,15 @@ const TenhimEditScreen: React.FC = () => {
                 </div>
             )}
             
+            {/* Мэдээлэл засах форм */}
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-4 sm:p-6 lg:p-8 rounded-xl shadow-lg border">
                 
-                {/* 🖼️ ЗУРГУУДЫГ СОЛИХ */}
                 <div className="border-b pb-6">
-                    <h3 className="text-lg font-semibold text-gray-700 mb-4">📸 Зургууд Солих</h3>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Зургууд Солих</h3>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                        {/* НҮҮР ЗУРАГ */}
+
+                        {/* Нүүр зураг (Cover Image) хэсэг */}
                         <div>
                             <Label className="text-sm sm:text-base font-semibold mb-2 block">
                                 Нүүр Зураг (Cover)
@@ -275,7 +288,7 @@ const TenhimEditScreen: React.FC = () => {
                                         alt="Нүүр Preview" 
                                         className="w-full h-40 sm:h-48 object-cover rounded-md"
                                     />
-                                    <p className="text-xs text-blue-600 mt-2 text-center">✅ Сонгогдлоо</p>
+                                    <p className="text-xs text-blue-600 mt-2 text-center">Сонгогдлоо</p>
                                 </div>
                             )}
                             
@@ -288,7 +301,6 @@ const TenhimEditScreen: React.FC = () => {
                             />
                         </div>
 
-                        {/* ҮНДСЭН ЗУРАГ */}
                         <div>
                             <Label className="text-sm sm:text-base font-semibold mb-2 block">
                                 Үндсэн Зураг (Detail)
@@ -317,7 +329,7 @@ className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:b
                                      alt="Үндсэн Preview" 
                                      className="w-full h-40 sm:h-48 object-cover rounded-md"
                                  />
-<p className="text-xs text-blue-600 mt-2 text-center">✅ Сонгогдлоо</p>
+<p className="text-xs text-blue-600 mt-2 text-center">Сонгогдлоо</p>
 </div>
 )}<input
                             ref={detailInputRef}
@@ -330,7 +342,7 @@ className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:b
                 </div>
             </div>
 
-            {/* 📝 ТЕКСТ ТАЛБАРУУД */}
+            {/* Текст мэдээллийн талбарууд */}
             <div className="space-y-4">
                 <div>
                     <Label htmlFor="ner" className="text-sm font-medium">
@@ -348,33 +360,35 @@ className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:b
                 </div>
 
                 <div>
-                    <Label htmlFor="tergvvleh_chiglel" className="text-sm font-medium">
-                        Тэргүүлэх Чиглэл *
-                    </Label>
-                    <Input
-                        id="tergvvleh_chiglel"
-                        value={formData.tergvvleh_chiglel}
-                        onChange={(e) => setFormData({ ...formData, tergvvleh_chiglel: e.target.value })}
-                        placeholder="Биотехнологи ба эмнэлгийн судалгаа"
-                        required
-                        disabled={isSubmitting}
-                        className="mt-1"
-                    />
-                </div>
+        <Label htmlFor="tergvvleh_chiglel" className="text-sm font-medium">
+            Тэргүүлэх Чиглэл *
+        </Label>
+        <Textarea
+            id="tergvvleh_chiglel"
+            value={formData.tergvvleh_chiglel}
+            onChange={(e) => setFormData({ ...formData, tergvvleh_chiglel: e.target.value })}
+            placeholder="Биотехнологи ба эмнэлгийн судалгаа..."
+            required
+            disabled={isSubmitting}
+            rows={3}
+            className="mt-1"
+        />
+    </div>
 
-                <div>
-                    <Label htmlFor="shagnal" className="text-sm font-medium">
-                        Томоохон Шагнал / Амжилт
-                    </Label>
-                    <Input
-                        id="shagnal"
-                        value={formData.shagnal}
-                        onChange={(e) => setFormData({ ...formData, shagnal: e.target.value })}
-                        placeholder="Оны шилдэг тэнхим 2024"
-                        disabled={isSubmitting}
-                        className="mt-1"
-                    />
-                </div>
+    <div>
+        <Label htmlFor="shagnal" className="text-sm font-medium">
+            Томоохон Шагнал / Амжилт
+        </Label>
+        <Textarea
+            id="shagnal"
+            value={formData.shagnal}
+            onChange={(e) => setFormData({ ...formData, shagnal: e.target.value })}
+            placeholder="Оны шилдэг тэнхим 2024..."
+            disabled={isSubmitting}
+            rows={3}
+            className="mt-1"
+        />
+    </div>
 
                 <div>
                     <Label htmlFor="bvteel" className="text-sm font-medium">
@@ -407,14 +421,14 @@ className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:b
                 </div>
             </div>
 
-            {/* 🔘 SUBMIT BUTTON */}
+            {/* Хадгалах товчлуур */}
             <Button 
                 type="submit" 
                 disabled={isSubmitting}
                 className="w-full py-3 px-4 rounded-lg text-white font-semibold transition duration-150 text-sm sm:text-base
-                           bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-                {isSubmitting ? '⏳ Хадгалж байна...' : '💾 Өөрчлөлт Хадгалах'}
+                {isSubmitting ? '⏳ Хадгалж байна...' : 'Өөрчлөлт Хадгалах'}
             </Button>
         </form>
     </div>

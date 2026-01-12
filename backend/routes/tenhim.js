@@ -3,13 +3,12 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const Tenhim = require('../models/tenhimModel'); // Тэнхим модел байгаа зам
+const Tenhim = require('../models/tenhimModel'); 
 
-// 1. Storage тохиргоо (Зургийг хаана, ямар нэрээр хадгалах)
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadPath = path.join(__dirname, '../uploads/tenhim');
-        // Хавтас байхгүй бол үүсгэх
+       
         if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath, { recursive: true });
         }
@@ -21,10 +20,9 @@ const storage = multer.diskStorage({
     }
 });
 
-// 2. Файл шүүлтүүр (Зөвхөн зураг зөвшөөрөх)
 const upload = multer({ 
     storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+    limits: { fileSize: 5 * 1024 * 1024 }, 
     fileFilter: (req, file, cb) => {
         const allowedTypes = /jpeg|jpg|png|gif|webp/;
         const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -103,16 +101,14 @@ router.put('/:id/upload', upload.fields([
     { name: 'detailImage', maxCount: 1 }
 ]), async (req, res) => {
     try {
-        // 1. Засах гэж буй тэнхим байгаа эсэхийг шалгах
         const existingTenhim = await Tenhim.findById(req.params.id);
         if (!existingTenhim) {
             return res.status(404).json({ success: false, error: 'Тэнхим олдсонгүй' });
         }
 
-        // 2. Зургийн массивыг бэлдэх
         let zurag = Array.isArray(existingTenhim.zurag) ? [...existingTenhim.zurag] : ['', ''];
 
-        // Cover Image шинэчлэх
+       
         if (req.files?.['coverImage']?.[0]) {
             if (zurag[0]) {
                 const oldPath = path.join(__dirname, '..', zurag[0]);
@@ -121,7 +117,7 @@ router.put('/:id/upload', upload.fields([
             zurag[0] = `/uploads/tenhim/${req.files['coverImage'][0].filename}`;
         }
 
-        // Detail Image шинэчлэх
+    
         if (req.files?.['detailImage']?.[0]) {
             if (zurag[1]) {
                 const oldPath = path.join(__dirname, '..', zurag[1]);
@@ -130,15 +126,13 @@ router.put('/:id/upload', upload.fields([
             zurag[1] = `/uploads/tenhim/${req.files['detailImage'][1].filename}`;
         }
 
-        // 3. ӨГӨГДЛИЙГ ШИНЭЧЛЭХ (Энэ хэсэг хамгийн чухал)
-        // new Tenhim биш findByIdAndUpdate ашиглана
         const updatedTenhim = await Tenhim.findByIdAndUpdate(
             req.params.id, 
             {
                 ...req.body,
                 zurag: zurag
             },
-            { new: true, runValidators: true } // new: true нь шинэчлэгдсэн датаг буцаадаг
+            { new: true, runValidators: true } 
         );
 
         res.status(200).json({ success: true, data: updatedTenhim });
@@ -158,7 +152,6 @@ router.delete('/:id', async (req, res) => {
             return res.status(404).json({ success: false, error: 'Тэнхим олдсонгүй' });
         }
 
-        // Файлуудыг устгах
         if (tenhim.zurag && tenhim.zurag.length > 0) {
             tenhim.zurag.forEach(filePath => {
                 if (filePath) {

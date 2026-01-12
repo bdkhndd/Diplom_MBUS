@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
     View, 
     Text, 
@@ -13,9 +13,9 @@ import {
     KeyboardAvoidingView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Stack } from 'expo-router';
+import { router, Stack, useFocusEffect } from 'expo-router';
 import { getContactInfo, sendFeedback, ContactInfoType, FeedbackType } from '@/services/contactinfoService';
-
+import { useLocalSearchParams } from 'expo-router';
 const COLORS = {
     primary: '#3b5998',
     success: '#4CAF50',
@@ -53,7 +53,7 @@ export default function ContactScreen() {
     const [isLoading, setIsLoading] = useState(true);
     const [showFeedbackForm, setShowFeedbackForm] = useState(false);
     const [isSending, setIsSending] = useState(false);
-    
+    const params = useLocalSearchParams(); 
     // Form
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -61,9 +61,28 @@ export default function ContactScreen() {
     const [subject, setSubject] = useState('');
     const [message, setMessage] = useState('');
 
+    const [feedback, setFeedback] = useState<string>(''); 
+    const [successMessage, setSuccessMessage] = useState<string>(''); 
+
+    
     useEffect(() => {
         loadContactInfo();
     }, []);
+    useFocusEffect(
+        useCallback(() => {
+            if (params.mode === 'feedback') {
+                setShowFeedbackForm(true);// параметр нь 'feedback' байвал Feedback form-ийг харуулна.
+                // Параметрийг нэг удаа уншаад цэвэрлэх (Tab-аар ороход дахин нээхгүй байх)
+                router.setParams({ mode: undefined });
+            }
+        }, [params.mode])
+    );
+
+    // 4. Формыг хаах функц
+    const handleCloseForm = () => {
+        setShowFeedbackForm(false);
+        router.setParams({ mode: undefined });
+    };
 
     const loadContactInfo = async () => {
         setIsLoading(true);
@@ -131,6 +150,7 @@ export default function ContactScreen() {
         // Validation
         if (!name.trim() || !email.trim() || !subject.trim() || !message.trim()) {
             Alert.alert('Анхааруулга', 'Шаардлагатай талбаруудыг бөглөнө үү');
+            
             return;
         }
 
@@ -186,113 +206,126 @@ export default function ContactScreen() {
         );
     }
 
-    if (showFeedbackForm) {
-        return (
-            <KeyboardAvoidingView 
-                style={styles.container} 
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            >
-                <Stack.Screen 
-                    options={{ 
-                        headerTitle: 'Санал хүсэлт илгээх',
-                        headerStyle: { backgroundColor: COLORS.primary },
-                        headerTintColor: COLORS.white,
-                        headerLeft: () => (
-                            <TouchableOpacity onPress={() => setShowFeedbackForm(false)} style={{ marginLeft: 10 }}>
-                                <Ionicons name="arrow-back" size={24} color={COLORS.white} />
-                            </TouchableOpacity>
-                        ),
-                    }} 
-                />
-                
-                <ScrollView 
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={styles.scrollContent}
-                >
-                    <View style={styles.formCard}>
-                        <View style={styles.formHeader}>
-                            <Ionicons name="mail-outline" size={40} color={COLORS.primary} />
-                            <Text style={styles.formTitle}>Санал хүсэлт илгээх</Text>
-                            <Text style={styles.formSubtitle}>
-                                Таны санал хүсэлт бидэнд чухал. Асуулт, санал хүсэлтээ бидэнд илгээнэ үү.
-                            </Text>
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Нэр <Text style={styles.required}>*</Text></Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Таны нэр"
-                                value={name}
-                                onChangeText={setName}
-                            />
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>И-мэйл <Text style={styles.required}>*</Text></Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="example@email.com"
-                                value={email}
-                                onChangeText={setEmail}
-                                keyboardType="email-address"
-                                autoCapitalize="none"
-                            />
-                        </View>
- 
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Утас</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="99112233"
-                                value={phone}
-                                onChangeText={setPhone}
-                                keyboardType="phone-pad"
-                            />
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Гарчиг <Text style={styles.required}>*</Text></Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Санал хүсэлтийн гарчиг"
-                                value={subject}
-                                onChangeText={setSubject}
-                            />
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Мессеж <Text style={styles.required}>*</Text></Text>
-                            <TextInput
-                                style={[styles.input, styles.textArea]}
-                                placeholder="Санал хүсэлтээ энд бичнэ үү..."
-                                value={message}
-                                onChangeText={setMessage}
-                                multiline
-                                numberOfLines={6}
-                                textAlignVertical="top"
-                            />
-                        </View>
-
-                        <TouchableOpacity 
-                            style={[styles.submitButton, isSending && styles.submitButtonDisabled]}
-                            onPress={handleSubmitFeedback}
-                            disabled={isSending}
-                        >
-                            {isSending ? (
-                                <ActivityIndicator color={COLORS.white} />
-                            ) : (
-                                <>
-                                    <Ionicons name="send" size={20} color={COLORS.white} />
-                                    <Text style={styles.submitButtonText}>Илгээх</Text>
-                                </>
-                            )}
+   if (showFeedbackForm) {
+    return (
+        <KeyboardAvoidingView 
+            style={[styles.container, { justifyContent: 'center' }]} // Төвд байрлуулах
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+            <Stack.Screen 
+                options={{ 
+                    headerTitle: 'Санал хүсэлт',
+                    headerStyle: { backgroundColor: COLORS.primary },
+                    headerTintColor: COLORS.white,
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => setShowFeedbackForm(false)} style={{ marginLeft: 10 }}>
+                            <Ionicons name="close" size={28} color={COLORS.white} />
                         </TouchableOpacity>
+                    ),
+                }} 
+            />
+            
+            <ScrollView 
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: 20 }} // Төвд голлуулах
+            >
+                <View style={[styles.formCard, { 
+                    borderRadius: 25, // Ирмэгийг илүү дугуй болгосон
+                    padding: 20,
+                    elevation: 5,
+                    shadowRadius: 10,
+                    position: 'relative'
+                }]}> 
+                    {/* Баруун дээд буланд байх X товчлуур */}
+                    <TouchableOpacity 
+                        style={{ position: 'absolute', right: 15, top: 15, zIndex: 10 }} 
+                        onPress={() => setShowFeedbackForm(false)}
+                    >
+                        <Ionicons name="close-circle" size={32} color={COLORS.textLight} />
+                    </TouchableOpacity>
+
+                    <View style={styles.formHeader}>
+                        <Ionicons name="mail-open-outline" size={40} color={COLORS.primary} />
+                        <Text style={[styles.formTitle, { fontSize: 20 }]}>Санал хүсэлт</Text>
                     </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
-        );
-    }
+
+                    {/* Оролтын талбарууд */}
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Нэр <Text style={styles.required}>*</Text></Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Таны нэр"
+                            value={name}
+                            onChangeText={setName}
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>И-мэйл <Text style={styles.required}>*</Text></Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="example@email.com"
+                            value={email}
+                            onChangeText={setEmail}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                        />
+                    </View>
+
+                    {/* Утасны дугаар нэмсэн хэсэг */}
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Утас</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Утасны дугаар"
+                            value={phone}
+                            onChangeText={setPhone}
+                            keyboardType="phone-pad"
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Гарчиг <Text style={styles.required}>*</Text></Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Юуны тухай?"
+                            value={subject}
+                            onChangeText={setSubject}
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Мессеж <Text style={styles.required}>*</Text></Text>
+                        <TextInput
+                            style={[styles.input, { height: 80 }]}
+                            placeholder="Таны санал хүсэлт..."
+                            value={message}
+                            onChangeText={setMessage}
+                            multiline
+                            numberOfLines={3}
+                            textAlignVertical="top"
+                        />
+                    </View>
+
+                    <TouchableOpacity 
+                        style={[styles.submitButton, { borderRadius: 15, marginTop: 10 }]}
+                        onPress={handleSubmitFeedback}
+                        disabled={isSending}
+                    >
+                        {isSending ? (
+                            <ActivityIndicator color={COLORS.white} />
+                        ) : (
+                            <>
+                                <Ionicons name="send" size={18} color={COLORS.white} />
+                                <Text style={styles.submitButtonText}>Илгээх</Text>
+                            </>
+                        )}
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
+    );
+}
 
     return (
         <View style={styles.container}>

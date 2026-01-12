@@ -22,7 +22,7 @@ export const TetgelegEditScreen: React.FC = () => {
     const [formData, setFormData] = useState({
         teteglegNer: '',
         shaardlag: '',
-        meregjilId: [] as string[], // Талбарын нэр: meregjilId
+        meregjilId: [] as string[], 
         teteglegiin_Hemjee: '',
         bosgo_Onoo: '',
         hugatsaa: '',
@@ -44,11 +44,9 @@ export const TetgelegEditScreen: React.FC = () => {
 
                 setMergejilList(Array.isArray(mData) ? mData : []);
 
-                // Засах өгөгдлийг State-д оноох
                 setFormData({
                     teteglegNer: tetgelegData.teteglegNer || '',
                     shaardlag: tetgelegData.shaardlag || '',
-                    // Backend-ээс ирж буй meregjilId-г шалгаж авах
                     meregjilId: (tetgelegData.meregjilId || []).map((m: any) => 
                         typeof m === 'object' ? m._id : m
                     ),
@@ -113,7 +111,7 @@ export const TetgelegEditScreen: React.FC = () => {
 
     return (
         <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-6">
-            {/* Header */}
+          
             <div className="flex items-center justify-between bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
                 <Button variant="ghost" onClick={() => navigate(-1)} className="rounded-xl">
                     <ChevronLeft className="w-5 h-5 mr-1" /> Буцах
@@ -129,7 +127,7 @@ export const TetgelegEditScreen: React.FC = () => {
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                {/* Зүүн тал */}
+             
                 <div className="lg:col-span-2 space-y-6">
                     <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 space-y-6">
                         <div className="space-y-2">
@@ -152,7 +150,7 @@ export const TetgelegEditScreen: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Мэргэжил сонгох хэсэг */}
+                
                     <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6">
                         <div className="flex items-center justify-between mb-4">
                             <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
@@ -183,7 +181,7 @@ export const TetgelegEditScreen: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Баруун тал */}
+           
                 <div className="space-y-6">
                     <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 space-y-5">
                         <div className="space-y-2">

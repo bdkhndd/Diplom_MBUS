@@ -27,11 +27,10 @@ export const VideoCreateScreen: React.FC = () => {
         duration: '',
     });
 
-    // Файл сонгох үед ажиллах
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            // Өмнөх preview URL-ийг устгаж санах ойг чөлөөлөх
+           
             if (previewUrl) URL.revokeObjectURL(previewUrl);
             
             setVideoFile(file);
@@ -53,12 +52,12 @@ export const VideoCreateScreen: React.FC = () => {
 
             const res = await createVideo(data as any);
             
-            // Backend-ээс ирсэн датаг Context-рүү нэмэх
+           
             const newVideo = (res as any).data || res;
             dispatch({ type: 'ADD_VIDEO', payload: newVideo });
             
             alert("Видео амжилттай хадгалагдлаа!");
-            navigate('/video'); // Жагсаалт руу буцах
+            navigate('/video'); 
         } catch (err) {
             alert("Алдаа гарлаа. Файлын хэмжээ хэтэрсэн эсвэл сервер ажиллахгүй байна.");
         } finally {
@@ -68,7 +67,7 @@ export const VideoCreateScreen: React.FC = () => {
 
     return (
         <div className="p-6 md:p-12 max-w-6xl mx-auto space-y-8 bg-slate-50/50 min-h-screen">
-            {/* Header */}
+        
             <div className="flex items-center justify-between bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100">
                 <Button variant="ghost" onClick={() => navigate(-1)} className="rounded-2xl font-black text-slate-500 hover:bg-slate-50">
                     <ArrowLeft className="mr-2 h-5 w-5"/> БУЦАХ
@@ -78,7 +77,7 @@ export const VideoCreateScreen: React.FC = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Зүүн тал: Видео файл хуулах ба Preview */}
+              
                 <div className="lg:col-span-2 space-y-6">
                     <Card className="rounded-[3rem] border-none shadow-2xl overflow-hidden bg-white">
                         <CardHeader className="bg-slate-900 p-8 text-white">
@@ -128,7 +127,7 @@ export const VideoCreateScreen: React.FC = () => {
                     </Card>
                 </div>
 
-                {/* Баруун тал: Мэдээлэл бөглөх */}
+               
                 <div className="space-y-6">
                     <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
                         <div className="bg-blue-600 h-2 w-full"></div>

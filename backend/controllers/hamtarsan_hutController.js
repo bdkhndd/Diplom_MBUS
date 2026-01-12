@@ -7,7 +7,7 @@ const getHamtarsanHut = async (req, res) => {
             .sort({ createdAt: -1 })
             .populate('mergejilId'); 
         
-        res.status(200).json({ data: hutulburList });  // ✅ { data: ... }
+        res.status(200).json({ data: hutulburList });  
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -25,7 +25,7 @@ const getSingleHamtarsanHut = async (req, res) => {
         if (!hutulbur) {
             return res.status(404).json({ error: 'Хамтарсан хөтөлбөр олдсонгүй' });
         }
-        res.status(200).json({ data: hutulbur });  // ✅ { data: ... }
+        res.status(200).json({ data: hutulbur }); 
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -42,7 +42,7 @@ const addHamtarsanHut = async (req, res) => {
             hutulbur, 
             hugatsaa
         });
-        res.status(201).json({ data: newHutulbur });  // ✅ { data: ... }
+        res.status(201).json({ data: newHutulbur }); 
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -59,7 +59,7 @@ const deleteHamtarsanHut = async (req, res) => {
         if (!hutulbur) {
             return res.status(400).json({ error: 'Хөтөлбөр олдсонгүй' });
         }
-        res.status(200).json({ data: hutulbur });  // ✅ { data: ... }
+        res.status(200).json({ data: hutulbur }); 
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -80,7 +80,7 @@ const updateHamtarsanHut = async (req, res) => {
         if (!hutulbur) {
             return res.status(404).json({ error: 'Хөтөлбөр олдсонгүй' });
         }
-        res.status(200).json({ data: hutulbur });  // ✅ { data: ... }
+        res.status(200).json({ data: hutulbur });  
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

@@ -75,7 +75,6 @@ const TulburCreateScreen: React.FC = () => {
 
                 <form onSubmit={handleSubmit} className="p-8 md:p-12 space-y-12">
                     
-                    {/* 1. Тэргүүлэх эрэлттэй мэргэжил */}
                     <div className="space-y-6">
                         <div className="flex items-center gap-2">
                             <Badge className="bg-green-500 h-6 w-6 rounded-full flex items-center justify-center text-white p-0">1</Badge>
@@ -110,7 +109,6 @@ const TulburCreateScreen: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* 2. Бусад мэргэжил */}
                     <div className="space-y-6">
                         <div className="flex items-center gap-2">
                             <Badge className="bg-blue-500 h-6 w-6 rounded-full flex items-center justify-center text-white p-0">2</Badge>
@@ -145,7 +143,6 @@ const TulburCreateScreen: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* 3. Кредитийн задаргаа */}
                     <div className="space-y-6">
                         <div className="flex items-center gap-2">
                             <LayoutGrid className="text-purple-600 w-6 h-6" />

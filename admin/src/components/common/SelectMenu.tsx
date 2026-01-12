@@ -1,18 +1,11 @@
-/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState } from "react";
 
-/**
- * Hicheel: Gosa hicheelii meergajilaa
- */
 type Hicheel = {
     code: string;
     name: string;
     type: 'main' | 'secondary';
 };
 
-/**
- * MergejilPreviewForm: Unka ulaagaalee meergajilaa
- */
 type MergejilPreviewForm = {
     mergejil_Ner: string;
     mergejil_Kod: string;
@@ -21,7 +14,7 @@ type MergejilPreviewForm = {
     suraltsah_hugatsaa: string;
     minScore: number | string;
     tenhimId: string;
-    category: string; // SelectMenu-n akka itti fayyadamuu danda'uuf dabalame
+    category: string; 
     hicheeluud: Hicheel[];
 };
 
@@ -30,13 +23,8 @@ type UpdatePreviewContextType = {
     setForm: React.Dispatch<React.SetStateAction<MergejilPreviewForm>>;
 }
 
-// Context uumuun (Context-iin uumuu)
 export const UpdatePreviewContext = createContext<UpdatePreviewContextType | null>(null);
 
-/**
- * UpdatePreviewProvider
- * Namoota gargaaruuf kan qophaa'e
- */
 export const UpdatePreviewProvider = ({ children }: { children: React.ReactNode }) => {
     const [form, setForm] = useState<MergejilPreviewForm>({
         mergejil_Ner: "",
@@ -46,7 +34,7 @@ export const UpdatePreviewProvider = ({ children }: { children: React.ReactNode 
         suraltsah_hugatsaa: "",
         minScore: "",
         tenhimId: "",
-        category: "", // Initial state dabalameera
+        category: "", 
         hicheeluud: [], 
     });
 
@@ -57,10 +45,6 @@ export const UpdatePreviewProvider = ({ children }: { children: React.ReactNode 
     );
 };
 
-/**
- * usePreviewUpdater
- * Custom hook hojii kanaaf oolu
- */
 export const usePreviewUpdater = () => {
     const context = useContext(UpdatePreviewContext);
     if (!context) {
@@ -69,5 +53,4 @@ export const usePreviewUpdater = () => {
     return context;
 };
 
-// Default export dabaluun dogoggora sana ni sirreessa
 export default UpdatePreviewProvider;
